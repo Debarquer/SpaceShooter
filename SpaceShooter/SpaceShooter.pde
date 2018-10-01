@@ -37,7 +37,7 @@ void draw(){
   textFont(f, 32);
   fill(0, 0, 0);
 
-  String s = "Health: "+(int)health + " Score: "+score;
+  String s = "Health: "+(int)health + " Score: "+(int)score;
   text(s, 30, 30);
 
   if(enemies.size() <= 0){
