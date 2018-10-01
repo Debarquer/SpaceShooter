@@ -1,6 +1,7 @@
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
+PowerUp powerup;
 
 float health = 10;
 float score = 0;
@@ -24,6 +25,7 @@ void setup(){
   SpawnEnemies();
 
   bullets = new ArrayList<Bullet>();
+  powerup = new PowerUp();
 }
 
 void draw(){
@@ -40,7 +42,7 @@ void draw(){
   if(enemies.size() <= 0){
     SpawnEnemies();
   }
-
+  powerup.update();
   player.Move();
   player.Update();
 
