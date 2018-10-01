@@ -18,6 +18,10 @@ ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
 
+float health = 10;
+float score = 0;
+float scoreIncrement = 10;
+
 public void setup(){
   
 
@@ -41,6 +45,14 @@ public void setup(){
 public void draw(){
   background(0, 255, 255);
 
+  PFont f;
+  f = createFont("Arial", 32, true);
+  textFont(f, 32);
+  fill(0, 0, 0);
+
+  String s = "Health: "+(int)health + " Score: "+score;
+  text(s, 30, 30);
+
   if(enemies.size() <= 0){
     SpawnEnemies();
   }
@@ -51,6 +63,16 @@ public void draw(){
   for(int i = 0; i < enemies.size(); i++){
     if(enemies.get(i).enabled){
       enemies.get(i).Move();
+
+      if(BulletPlayerCollision(enemies.get(i), player)){
+        enemies.get(i).enabled = false;
+        health--;
+        if(health <= 0){
+          health = 0;
+          print("YOU LOSE!\n");
+        }
+      }
+
       enemies.get(i).Update();
     }
     else{
@@ -68,6 +90,7 @@ public void draw(){
           if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
             bullets.get(i).enabled = false;
             enemies.get(j).enabled = false;
+            score += scoreIncrement;
           }
         }
       }
@@ -75,8 +98,12 @@ public void draw(){
         //check collision with the player
         if(BulletPlayerCollision(bullets.get(i), player)){
           bullets.get(i).enabled = false;
-          print("YOU LOSE!\n");
-          //exit();
+          health--;
+          if(health <= 0){
+            health = 0;
+            print("YOU LOSE!\n");
+            exit();
+          }
         }
       }
 
@@ -95,7 +122,7 @@ public void draw(){
     PVector pos = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - r/2, player.pos.z);
     PVector vel = new PVector(10, 10, 10);
     PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(0, 0, 0);
+    PVector colStroke = new PVector(0, 255, 0);
     PVector colFill = new PVector(0, 0, 0);
     float health = 1;
 
@@ -106,15 +133,15 @@ public void draw(){
 
 public void SpawnEnemies(){
   for(int i = 0; i < 6; i++){
-    float r = 50;
+    float r = 30;
     float margin = 5;
-    float x = width + (i * (r + 5));
+    float x = width + (i * (r + 50));
     //float x = width/2;
     PVector pos = new PVector(x, 0, 0);
     PVector vel = new PVector(2, 2, 2);
     PVector a = new PVector(0, 0, 0);
     PVector colStroke = new PVector(155, 155, 155);
-    PVector colFill = new PVector(0, 0, 0);
+    PVector colFill = new PVector(255, 0, 0);
     float health = 10;
     float angle = i * 3;
 
@@ -161,7 +188,7 @@ public boolean BulletEnemyCollision(Bullet bullet, Enemy enemy){
   return dist(bullet.pos.x, bullet.pos.y, enemy.pos.x, enemy.pos.y) < bullet.r + enemy.r;
 }
 
-public boolean BulletPlayerCollision(Bullet bullet, Player player){
+public boolean BulletPlayerCollision(GameObject bullet, Player player){
   return dist(bullet.pos.x, bullet.pos.y, player.pos.x, player.pos.y) < bullet.r + player.size.x;
 }
 class Enemy extends GameObject{
@@ -204,8 +231,10 @@ class Enemy extends GameObject{
     if(pos.y > height){
       enabled = false;
     }
-    if(pos.x < 0){
+    if(pos.x < -r){{
       sine = !sine;
+      score -= scoreIncrement;
+    }
 
       pos.x = width;
       if(sine)
@@ -224,7 +253,7 @@ class Enemy extends GameObject{
     PVector velBullet = new PVector(-10, -10, -10);
     PVector aBullet = new PVector(0, 0, 0);
     PVector colStrokeBullet = new PVector(0, 0, 0);
-    PVector colFillBullet = new PVector(0, 0, 0);
+    PVector colFillBullet = new PVector(255, 0, 0);
     float healthBullet = 1;
 
     Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, false);

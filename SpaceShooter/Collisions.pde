@@ -6,6 +6,6 @@ public boolean BulletEnemyCollision(Bullet bullet, Enemy enemy){
   return dist(bullet.pos.x, bullet.pos.y, enemy.pos.x, enemy.pos.y) < bullet.r + enemy.r;
 }
 
-public boolean BulletPlayerCollision(Bullet bullet, Player player){
+public boolean BulletPlayerCollision(GameObject bullet, Player player){
   return dist(bullet.pos.x, bullet.pos.y, player.pos.x, player.pos.y) < bullet.r + player.size.x;
 }

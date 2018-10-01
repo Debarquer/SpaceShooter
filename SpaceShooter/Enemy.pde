@@ -38,8 +38,10 @@ class Enemy extends GameObject{
     if(pos.y > height){
       enabled = false;
     }
-    if(pos.x < 0){
+    if(pos.x < -r){{
       sine = !sine;
+      score -= scoreIncrement;
+    }
 
       pos.x = width;
       if(sine)
@@ -58,7 +60,7 @@ class Enemy extends GameObject{
     PVector velBullet = new PVector(-10, -10, -10);
     PVector aBullet = new PVector(0, 0, 0);
     PVector colStrokeBullet = new PVector(0, 0, 0);
-    PVector colFillBullet = new PVector(0, 0, 0);
+    PVector colFillBullet = new PVector(255, 0, 0);
     float healthBullet = 1;
 
     Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, false);
