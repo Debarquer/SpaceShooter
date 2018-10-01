@@ -5,16 +5,20 @@ class Player extends GameObject{
   float shootTimerCurr = 0;
   boolean canFire = true;
 
+  Weapon weapon;
+
   public Player(){
     super();
   }
 
-  public Player(PVector pos, PVector vel, PVector a, PVector colStroke, PVector colFill, float r, float health, PVector size){
+  public Player(PVector pos, PVector vel, PVector a, PVector colStroke, PVector colFill, float r, float health, PVector size, Weapon weapon){
     super(pos, vel, a, colStroke, colFill, r, health);
 
     this.size = new PVector();
     this.size.x = size.x;
     this.size.y = size.y;
+
+    this.weapon = weapon;
   }
 
   public void Update(){

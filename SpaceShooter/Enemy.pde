@@ -28,7 +28,8 @@ class Enemy extends GameObject{
         shootTimerCurr = 0;
         canFire = true;
       }
-    }else{
+    }
+    else{
       Shoot();
       canFire = false;
     }
@@ -38,20 +39,28 @@ class Enemy extends GameObject{
     if(pos.y > height){
       enabled = false;
     }
-    if(pos.x < -r){{
+    if(pos.x < -r){
       sine = !sine;
       score -= scoreIncrement;
-    }
-
       pos.x = width;
-      if(sine)
-        pos.y = height/2 + sin(angle) * amplitude;
-      else
-        pos.y = height/2 + cos(angle) * amplitude;
     }
 
+    if(sine)
+      pos.y = height/2 + sin(angle) * amplitude;
+    else
+      pos.y = height/2 + cos(angle) * amplitude;
+
+    fill(colFill.x, colFill.y, colFill.z);
     ellipseMode(RADIUS);
     ellipse(pos.x, pos.y, r, r);
+
+    PFont f;
+    f = createFont("Arial", 16, true);
+    textFont(f, 16);
+    fill(0, 0, 0);
+
+    String s = ""+(int)this.currHealth;
+    text(s, pos.x, pos.y);
   }
 
   public void Shoot(){
@@ -63,7 +72,7 @@ class Enemy extends GameObject{
     PVector colFillBullet = new PVector(255, 0, 0);
     float healthBullet = 1;
 
-    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, false);
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, false, 1);
     bullets.add(bullet);
   }
 
@@ -77,5 +86,16 @@ class Enemy extends GameObject{
       pos.y = height/2 + sin(angle) * amplitude;
     else
       pos.y = height/2 + cos(angle) * amplitude;
+  }
+
+  public boolean TakeDamage(float damage){
+    currHealth -= damage;
+    if(currHealth <= 0){
+      return true;
+    }
+    else{
+      colFill = new PVector(currHealth/this.health * 255, (1/(currHealth/this.health)) * 255, 0);
+      return false;
+    }
   }
 }

@@ -5,6 +5,7 @@ Player player;
 float health = 10;
 float score = 0;
 float scoreIncrement = 10;
+float level = 1;
 
 void setup(){
   size(1400, 900);
@@ -18,7 +19,8 @@ void setup(){
   float health = 10;
   PVector size = new PVector(20, 15);
 
-  player = new Player(pos, vel, a, colStroke, colFill, r, health, size);
+  Weapon weapon = new Weapon(1);
+  player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
 
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
@@ -34,10 +36,11 @@ void draw(){
   textFont(f, 32);
   fill(0, 0, 0);
 
-  String s = "Health: "+(int)health + " Score: "+(int)score;
+  String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
   text(s, 30, 30);
 
   if(enemies.size() <= 0){
+    level++;
     SpawnEnemies();
   }
 
@@ -72,9 +75,11 @@ void draw(){
       if(bullets.get(i).playerBullet){
         for(int j = 0; j < enemies.size(); j++){
           if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
-            bullets.get(i).enabled = false;
-            enemies.get(j).enabled = false;
-            score += scoreIncrement;
+            if(enemies.get(j).TakeDamage(bullets.get(i).damage)){
+              bullets.get(i).enabled = false;
+              enemies.get(j).enabled = false;
+              score += scoreIncrement;
+            }
           }
         }
       }
@@ -86,7 +91,7 @@ void draw(){
           if(health <= 0){
             health = 0;
             print("YOU LOSE!\n");
-            exit();
+            //exit();
           }
         }
       }
@@ -110,7 +115,7 @@ void draw(){
     PVector colFill = new PVector(0, 0, 0);
     float health = 1;
 
-    Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true);
+    Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true, player.weapon.damage);
     bullets.add(bullet);
   }
 }
@@ -124,9 +129,9 @@ void SpawnEnemies(){
     PVector pos = new PVector(x, 0, 0);
     PVector vel = new PVector(2, 2, 2);
     PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(155, 155, 155);
+    PVector colStroke = new PVector(0, 255, 0);
     PVector colFill = new PVector(255, 0, 0);
-    float health = 10;
+    float health = 1 + 2*(level-1);
     float angle = i * 3;
 
     Enemy enemy = new Enemy(pos, vel, a, colStroke, colFill, r, health, angle);

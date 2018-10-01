@@ -1,6 +1,6 @@
 abstract class GameObject{
   PVector pos, vel, a, colStroke, colFill;
-  float r, health;
+  float r, health, currHealth;
   boolean enabled;
 
   public GameObject(){
@@ -40,7 +40,7 @@ abstract class GameObject{
     this.colFill.z = colFill.z;
 
     this.r = r;
-    this.health = health;
+    this.currHealth = this.health = health;
 
     enabled = true;
   }
