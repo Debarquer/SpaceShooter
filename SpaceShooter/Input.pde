@@ -7,7 +7,7 @@ boolean space;
 void keyPressed()
 {
 
-	println(keyCode);
+	//println(keyCode);
 
 	//keyCodes
 
@@ -58,7 +58,7 @@ void keyPressed()
 
 void keyReleased()
 {
-	
+
 	//keyCodes
 
 	if(key == CODED)
@@ -90,7 +90,7 @@ void keyReleased()
 	else if(key == 'a' || key == 'A')
 	{
 		moveLeft = false;
-	}	
+	}
 	if(key == 'w' || key == 'W')
 	{
 		moveUp = false;
@@ -129,7 +129,7 @@ float getAxisRaw(String axis)
 		if(moveDown)
 		{
 			return 1;
-		}		
+		}
 	}
 
 	return 0;
