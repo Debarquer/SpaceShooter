@@ -17,11 +17,11 @@ public class SpaceShooter extends PApplet {
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
+Stars stars;
 
 float health = 10;
 float score = 0;
 float scoreIncrement = 10;
-float level = 1;
 
 public void setup(){
   
@@ -35,28 +35,28 @@ public void setup(){
   float health = 10;
   PVector size = new PVector(20, 15);
 
-  Weapon weapon = new Weapon(1);
-  player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
+  player = new Player(pos, vel, a, colStroke, colFill, r, health, size);
 
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
   bullets = new ArrayList<Bullet>();
+
+  stars = new Stars();
 }
 
 public void draw(){
   background(0, 255, 255);
-
+  stars.UpdateStars();
   PFont f;
   f = createFont("Arial", 32, true);
   textFont(f, 32);
   fill(0, 0, 0);
 
-  String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
+  String s = "Health: "+(int)health + " Score: "+score;
   text(s, 30, 30);
 
   if(enemies.size() <= 0){
-    level++;
     SpawnEnemies();
   }
 
@@ -91,11 +91,9 @@ public void draw(){
       if(bullets.get(i).playerBullet){
         for(int j = 0; j < enemies.size(); j++){
           if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
-            if(enemies.get(j).TakeDamage(bullets.get(i).damage)){
-              bullets.get(i).enabled = false;
-              enemies.get(j).enabled = false;
-              score += scoreIncrement;
-            }
+            bullets.get(i).enabled = false;
+            enemies.get(j).enabled = false;
+            score += scoreIncrement;
           }
         }
       }
@@ -107,7 +105,7 @@ public void draw(){
           if(health <= 0){
             health = 0;
             print("YOU LOSE!\n");
-            //exit();
+            exit();
           }
         }
       }
@@ -131,7 +129,7 @@ public void draw(){
     PVector colFill = new PVector(0, 0, 0);
     float health = 1;
 
-    Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true, player.weapon.damage);
+    Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true);
     bullets.add(bullet);
   }
 }
@@ -145,30 +143,67 @@ public void SpawnEnemies(){
     PVector pos = new PVector(x, 0, 0);
     PVector vel = new PVector(2, 2, 2);
     PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(0, 255, 0);
+    PVector colStroke = new PVector(155, 155, 155);
     PVector colFill = new PVector(255, 0, 0);
-    float health = 1 + 2*(level-1);
+    float health = 10;
     float angle = i * 3;
 
     Enemy enemy = new Enemy(pos, vel, a, colStroke, colFill, r, health, angle);
     enemies.add(enemy);
   }
 }
+class Stars{
+  ArrayList<Star> stars;
+
+  public Stars(){
+    stars = new ArrayList<Star>();
+    for(int i = 0; i < 100; i++){
+        stars.add(new Star(random(255), random(255), random(255), random(width), random(height)));
+    }
+  }
+
+  public void UpdateStars(){
+    for(Star star : stars){
+      star.Update();
+    }
+  }
+}
+
+class Star
+{
+  PVector starColor;
+  PVector pos;
+  float numStars = 100;
+
+  public Star(float x, float y, float z, float a, float b)
+  {
+  this.starColor = new PVector(x, y, z);
+  this.pos = new PVector(a, b);
+  }
+
+  public void Update()
+  {
+    for(int i = 0; i <= numStars; i++)
+    {
+      strokeWeight(2);
+      fill(starColor.x, starColor.y, starColor.z);
+      point(pos.x, pos.y);
+
+    }
+  }
+}
 class Bullet extends GameObject{
 
   boolean playerBullet;
-  float damage;
 
   public Bullet(){
     super();
   }
 
-  public Bullet(PVector pos, PVector vel, PVector a, PVector colStroke, PVector colFill, float r, float health, boolean playerBullet, float damage){
+  public Bullet(PVector pos, PVector vel, PVector a, PVector colStroke, PVector colFill, float r, float health, boolean playerBullet){
     super(pos, vel, a, colStroke, colFill, r, health);
 
     this.playerBullet = playerBullet;
-
-    this.damage = damage;
   }
 
   public void Update(){
@@ -229,8 +264,7 @@ class Enemy extends GameObject{
         shootTimerCurr = 0;
         canFire = true;
       }
-    }
-    else{
+    }else{
       Shoot();
       canFire = false;
     }
@@ -240,28 +274,20 @@ class Enemy extends GameObject{
     if(pos.y > height){
       enabled = false;
     }
-    if(pos.x < -r){
+    if(pos.x < -r){{
       sine = !sine;
       score -= scoreIncrement;
-      pos.x = width;
     }
 
-    if(sine)
-      pos.y = height/2 + sin(angle) * amplitude;
-    else
-      pos.y = height/2 + cos(angle) * amplitude;
+      pos.x = width;
+      if(sine)
+        pos.y = height/2 + sin(angle) * amplitude;
+      else
+        pos.y = height/2 + cos(angle) * amplitude;
+    }
 
-    fill(colFill.x, colFill.y, colFill.z);
     ellipseMode(RADIUS);
     ellipse(pos.x, pos.y, r, r);
-
-    PFont f;
-    f = createFont("Arial", 16, true);
-    textFont(f, 16);
-    fill(0, 0, 0);
-
-    String s = ""+(int)this.currHealth;
-    text(s, pos.x, pos.y);
   }
 
   public void Shoot(){
@@ -273,7 +299,7 @@ class Enemy extends GameObject{
     PVector colFillBullet = new PVector(255, 0, 0);
     float healthBullet = 1;
 
-    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, false, 1);
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, false);
     bullets.add(bullet);
   }
 
@@ -288,21 +314,10 @@ class Enemy extends GameObject{
     else
       pos.y = height/2 + cos(angle) * amplitude;
   }
-
-  public boolean TakeDamage(float damage){
-    currHealth -= damage;
-    if(currHealth <= 0){
-      return true;
-    }
-    else{
-      colFill = new PVector(currHealth/this.health * 255, (1/(currHealth/this.health)) * 255, 0);
-      return false;
-    }
-  }
 }
 abstract class GameObject{
   PVector pos, vel, a, colStroke, colFill;
-  float r, health, currHealth;
+  float r, health;
   boolean enabled;
 
   public GameObject(){
@@ -342,7 +357,7 @@ abstract class GameObject{
     this.colFill.z = colFill.z;
 
     this.r = r;
-    this.currHealth = this.health = health;
+    this.health = health;
 
     enabled = true;
   }
@@ -503,20 +518,16 @@ class Player extends GameObject{
   float shootTimerCurr = 0;
   boolean canFire = true;
 
-  Weapon weapon;
-
   public Player(){
     super();
   }
 
-  public Player(PVector pos, PVector vel, PVector a, PVector colStroke, PVector colFill, float r, float health, PVector size, Weapon weapon){
+  public Player(PVector pos, PVector vel, PVector a, PVector colStroke, PVector colFill, float r, float health, PVector size){
     super(pos, vel, a, colStroke, colFill, r, health);
 
     this.size = new PVector();
     this.size.x = size.x;
     this.size.y = size.y;
-
-    this.weapon = weapon;
   }
 
   public void Update(){
@@ -544,17 +555,6 @@ class Player extends GameObject{
     }
     else if(moveUp)
       pos.y -= vel.y;
-  }
-}
-class Weapon{
-  float damage;
-
-  public Weapon(){
-
-  }
-
-  public Weapon(float damage){
-    this.damage = damage;
   }
 }
   public void settings() {  size(1400, 900); }
