@@ -1,6 +1,7 @@
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
+Stars stars;
 
 float health = 10;
 float score = 0;
@@ -26,11 +27,13 @@ void setup(){
   SpawnEnemies();
 
   bullets = new ArrayList<Bullet>();
+
+  stars = new Stars();
 }
 
 void draw(){
   background(0, 255, 255);
-
+  stars.UpdateStars();
   PFont f;
   f = createFont("Arial", 32, true);
   textFont(f, 32);
