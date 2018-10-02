@@ -233,9 +233,20 @@ public void DrawText(float size, float x, float y, String s){
   PFont f;
   f = createFont("Arial", size, true);
   textFont(f, size);
-  fill(0, 0, 0);
+  //fill(0, 0, 0);
 
-  text(s, x, y);
+  fill(0);
+  for(int i = -1; i < 2; i++){
+  //  for(int y = -1; y < 2; y++){
+  //    text("LIKE THIS!", 20+x,20+y);
+  //  }
+      text(s, x+i,y);
+      text(s, x,y+i);
+  }
+  fill(255);
+  text(s, x,y);
+
+  //text(s, x, y);
 }
 class Stars{
   ArrayList<Star> stars;
