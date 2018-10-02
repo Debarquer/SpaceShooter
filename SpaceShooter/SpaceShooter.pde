@@ -1,11 +1,11 @@
+enum GameState {MainMenu, Paused, Playing};
+GameState gameState = GameState.Playing;
+
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
-<<<<<<< HEAD
 PowerUp powerup;
-=======
 Stars stars;
->>>>>>> 8cc4fac1bbf71c5a9dfd2966a0f8360037301b6d
 
 float health = 10;
 float score = 0;
@@ -31,103 +31,123 @@ void setup(){
   SpawnEnemies();
 
   bullets = new ArrayList<Bullet>();
-<<<<<<< HEAD
   powerup = new PowerUp();
-=======
 
   stars = new Stars();
->>>>>>> 8cc4fac1bbf71c5a9dfd2966a0f8360037301b6d
 }
 
 void draw(){
-  background(0, 255, 255);
-  stars.UpdateStars();
-  PFont f;
-  f = createFont("Arial", 32, true);
-  textFont(f, 32);
-  fill(0, 0, 0);
+  print(gameState + "\n");
+  if(gameState == GameState.Playing){
+    background(0, 255, 255);
+    stars.UpdateStars();
+    PFont f;
+    f = createFont("Arial", 32, true);
+    textFont(f, 32);
+    fill(0, 0, 0);
 
-  String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
-  text(s, 30, 30);
+    String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
+    text(s, 30, 30);
 
-  if(enemies.size() <= 0){
-    level++;
-    SpawnEnemies();
-  }
-  powerup.update();
-  player.Move();
-  player.Update();
-
-  for(int i = 0; i < enemies.size(); i++){
-    if(enemies.get(i).enabled){
-      enemies.get(i).Move();
-
-      if(BulletPlayerCollision(enemies.get(i), player)){
-        enemies.get(i).enabled = false;
-        health--;
-        if(health <= 0){
-          health = 0;
-          print("YOU LOSE!\n");
-        }
-      }
-
-      enemies.get(i).Update();
+    if(enemies.size() <= 0){
+      level++;
+      SpawnEnemies();
     }
-    else{
-      enemies.remove(i);
-    }
-  }
+    powerup.update();
+    player.Move();
+    player.Update();
 
-  //print(bullets.size() + "\n");
-  for(int i = 0; i < bullets.size(); i++){
-    if(bullets.get(i).enabled){
-      bullets.get(i).Move();
+    for(int i = 0; i < enemies.size(); i++){
+      if(enemies.get(i).enabled){
+        enemies.get(i).Move();
 
-      if(bullets.get(i).playerBullet){
-        for(int j = 0; j < enemies.size(); j++){
-          if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
-            if(enemies.get(j).TakeDamage(bullets.get(i).damage)){
-              bullets.get(i).enabled = false;
-              enemies.get(j).enabled = false;
-              score += scoreIncrement;
-            }
-          }
-        }
-      }
-      else{
-        //check collision with the player
-        if(BulletPlayerCollision(bullets.get(i), player)){
-          bullets.get(i).enabled = false;
+        if(BulletPlayerCollision(enemies.get(i), player)){
+          enemies.get(i).enabled = false;
           health--;
           if(health <= 0){
             health = 0;
             print("YOU LOSE!\n");
-            //exit();
           }
         }
+
+        enemies.get(i).Update();
       }
-
-
-      bullets.get(i).Update();
+      else{
+        enemies.remove(i);
+      }
     }
-    else{
-      bullets.remove(i);
+
+    //print(bullets.size() + "\n");
+    for(int i = 0; i < bullets.size(); i++){
+      if(bullets.get(i).enabled){
+        bullets.get(i).Move();
+
+        if(bullets.get(i).playerBullet){
+          for(int j = 0; j < enemies.size(); j++){
+            if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
+              if(enemies.get(j).TakeDamage(bullets.get(i).damage)){
+                bullets.get(i).enabled = false;
+                enemies.get(j).enabled = false;
+                score += scoreIncrement;
+              }
+            }
+          }
+        }
+        else{
+          //check collision with the player
+          if(BulletPlayerCollision(bullets.get(i), player)){
+            bullets.get(i).enabled = false;
+            health--;
+            if(health <= 0){
+              health = 0;
+              print("YOU LOSE!\n");
+              //exit();
+            }
+          }
+        }
+
+        bullets.get(i).Update();
+      }
+      else{
+        bullets.remove(i);
+      }
+    }
+
+    if(space && player.canFire){
+      player.canFire = false;
+
+      float r = 5;
+      PVector pos = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - r/2, player.pos.z);
+      PVector vel = new PVector(10, 10, 10);
+      PVector a = new PVector(0, 0, 0);
+      PVector colStroke = new PVector(0, 255, 0);
+      PVector colFill = new PVector(0, 0, 0);
+      float health = 1;
+
+      Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true, player.weapon.damage);
+      bullets.add(bullet);
+    }
+
+    if(pressedEscape && releasedEscape){
+      gameState = GameState.Paused;
+      pressedEscape = false;
+      releasedEscape = false;
     }
   }
+  else{
+    PFont f;
+    f = createFont("Arial", 64, true);
+    textFont(f, 64);
+    fill(0, 0, 0);
 
-  if(space && player.canFire){
-    player.canFire = false;
+    String s = "Paused";
+    text(s, width/2, height/2);
 
-    float r = 5;
-    PVector pos = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - r/2, player.pos.z);
-    PVector vel = new PVector(10, 10, 10);
-    PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(0, 255, 0);
-    PVector colFill = new PVector(0, 0, 0);
-    float health = 1;
-
-    Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true, player.weapon.damage);
-    bullets.add(bullet);
+    if(pressedEscape && releasedEscape){
+      gameState = GameState.Playing;
+      pressedEscape = false;
+      releasedEscape = false;
+    }
   }
 }
 

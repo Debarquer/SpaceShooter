@@ -14,9 +14,14 @@ import java.io.IOException;
 
 public class SpaceShooter extends PApplet {
 
+enum GameState {MainMenu, Paused, Playing};
+GameState gameState = GameState.Playing;
+
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
+PowerUp powerup;
+Stars stars;
 
 float health = 10;
 float score = 0;
@@ -42,97 +47,123 @@ public void setup(){
   SpawnEnemies();
 
   bullets = new ArrayList<Bullet>();
+  powerup = new PowerUp();
+
+  stars = new Stars();
 }
 
 public void draw(){
-  background(0, 255, 255);
+  print(gameState + "\n");
+  if(gameState == GameState.Playing){
+    background(0, 255, 255);
+    //stars.UpdateStars();
+    PFont f;
+    f = createFont("Arial", 32, true);
+    textFont(f, 32);
+    fill(0, 0, 0);
 
-  PFont f;
-  f = createFont("Arial", 32, true);
-  textFont(f, 32);
-  fill(0, 0, 0);
+    String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
+    text(s, 30, 30);
 
-  String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
-  text(s, 30, 30);
-
-  if(enemies.size() <= 0){
-    level++;
-    SpawnEnemies();
-  }
-
-  player.Move();
-  player.Update();
-
-  for(int i = 0; i < enemies.size(); i++){
-    if(enemies.get(i).enabled){
-      enemies.get(i).Move();
-
-      if(BulletPlayerCollision(enemies.get(i), player)){
-        enemies.get(i).enabled = false;
-        health--;
-        if(health <= 0){
-          health = 0;
-          print("YOU LOSE!\n");
-        }
-      }
-
-      enemies.get(i).Update();
+    if(enemies.size() <= 0){
+      level++;
+      SpawnEnemies();
     }
-    else{
-      enemies.remove(i);
-    }
-  }
+    powerup.update();
+    player.Move();
+    player.Update();
 
-  //print(bullets.size() + "\n");
-  for(int i = 0; i < bullets.size(); i++){
-    if(bullets.get(i).enabled){
-      bullets.get(i).Move();
+    for(int i = 0; i < enemies.size(); i++){
+      if(enemies.get(i).enabled){
+        enemies.get(i).Move();
 
-      if(bullets.get(i).playerBullet){
-        for(int j = 0; j < enemies.size(); j++){
-          if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
-            if(enemies.get(j).TakeDamage(bullets.get(i).damage)){
-              bullets.get(i).enabled = false;
-              enemies.get(j).enabled = false;
-              score += scoreIncrement;
-            }
-          }
-        }
-      }
-      else{
-        //check collision with the player
-        if(BulletPlayerCollision(bullets.get(i), player)){
-          bullets.get(i).enabled = false;
+        if(BulletPlayerCollision(enemies.get(i), player)){
+          enemies.get(i).enabled = false;
           health--;
           if(health <= 0){
             health = 0;
             print("YOU LOSE!\n");
-            //exit();
           }
         }
+
+        enemies.get(i).Update();
       }
-
-
-      bullets.get(i).Update();
+      else{
+        enemies.remove(i);
+      }
     }
-    else{
-      bullets.remove(i);
+
+    //print(bullets.size() + "\n");
+    for(int i = 0; i < bullets.size(); i++){
+      if(bullets.get(i).enabled){
+        bullets.get(i).Move();
+
+        if(bullets.get(i).playerBullet){
+          for(int j = 0; j < enemies.size(); j++){
+            if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
+              if(enemies.get(j).TakeDamage(bullets.get(i).damage)){
+                bullets.get(i).enabled = false;
+                enemies.get(j).enabled = false;
+                score += scoreIncrement;
+              }
+            }
+          }
+        }
+        else{
+          //check collision with the player
+          if(BulletPlayerCollision(bullets.get(i), player)){
+            bullets.get(i).enabled = false;
+            health--;
+            if(health <= 0){
+              health = 0;
+              print("YOU LOSE!\n");
+              //exit();
+            }
+          }
+        }
+
+        bullets.get(i).Update();
+      }
+      else{
+        bullets.remove(i);
+      }
+    }
+
+    if(space && player.canFire){
+      player.canFire = false;
+
+      float r = 5;
+      PVector pos = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - r/2, player.pos.z);
+      PVector vel = new PVector(10, 10, 10);
+      PVector a = new PVector(0, 0, 0);
+      PVector colStroke = new PVector(0, 255, 0);
+      PVector colFill = new PVector(0, 0, 0);
+      float health = 1;
+
+      Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true, player.weapon.damage);
+      bullets.add(bullet);
+    }
+
+    if(pressedEscape && releasedEscape){
+      gameState = GameState.Paused;
+      pressedEscape = false;
+      releasedEscape = false;
     }
   }
+  else{
+    PFont f;
+    f = createFont("Arial", 64, true);
+    textFont(f, 64);
+    fill(0, 0, 0);
 
-  if(space && player.canFire){
-    player.canFire = false;
+    String s = "Paused";
+    text(s, width/2, height/2);
 
-    float r = 5;
-    PVector pos = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - r/2, player.pos.z);
-    PVector vel = new PVector(10, 10, 10);
-    PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(0, 255, 0);
-    PVector colFill = new PVector(0, 0, 0);
-    float health = 1;
-
-    Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true, player.weapon.damage);
-    bullets.add(bullet);
+    if(pressedEscape && releasedEscape){
+      gameState = GameState.Playing;
+      pressedEscape = false;
+      releasedEscape = false;
+    }
   }
 }
 
@@ -152,6 +183,46 @@ public void SpawnEnemies(){
 
     Enemy enemy = new Enemy(pos, vel, a, colStroke, colFill, r, health, angle);
     enemies.add(enemy);
+  }
+}
+class Stars{
+  ArrayList<Star> stars;
+
+  public Stars(){
+    stars = new ArrayList<Star>();
+    for(int i = 0; i < 100; i++){
+        stars.add(new Star(random(255), random(255), random(255), random(width), random(height)));
+    }
+  }
+
+  public void UpdateStars(){
+    for(Star star : stars){
+      star.Update();
+    }
+  }
+}
+
+class Star
+{
+  PVector starColor;
+  PVector pos;
+  float numStars = 100;
+
+  public Star(float x, float y, float z, float a, float b)
+  {
+  this.starColor = new PVector(x, y, z);
+  this.pos = new PVector(a, b);
+  }
+
+  public void Update()
+  {
+    for(int i = 0; i <= numStars; i++)
+    {
+      strokeWeight(2);
+      fill(starColor.x, starColor.y, starColor.z);
+      point(pos.x, pos.y);
+
+    }
   }
 }
 class Bullet extends GameObject{
@@ -365,6 +436,8 @@ boolean moveRight;
 boolean moveUp;
 boolean moveDown;
 boolean space;
+boolean pressedEscape;
+boolean releasedEscape;
 
 public void keyPressed()
 {
@@ -416,6 +489,11 @@ public void keyPressed()
 	{
 		space = true;
 	}
+
+	if(key == 'p' || key == 'P')
+	{
+		pressedEscape = true;
+	}
 }
 
 public void keyReleased()
@@ -465,6 +543,11 @@ public void keyReleased()
 	if(key == ' ')
 	{
 		space = false;
+	}
+
+	if(key == 'p' || key == 'P')
+	{
+		releasedEscape = true;
 	}
 }
 
@@ -545,6 +628,34 @@ class Player extends GameObject{
     else if(moveUp)
       pos.y -= vel.y;
   }
+}
+class PowerUp extends GameObject{
+  
+  float PowerUpInc;
+ // int numbers[];
+ 
+ public PowerUp(){
+   //numbers = new int[]
+//  super(pos, vel, a, colStroke, colFill, r, health);
+  pos = new PVector();
+  PowerUpInc = random(100);
+  //vel = new PVector();
+  colStroke = new PVector(20, 255, 20);
+  colFill = new PVector(20, 255, 20);
+    pos.x= random(width);
+    pos.y= random(height);
+    //PowerUpInc = %10;
+  
+  }
+  public void update (){
+if (score == PowerUpInc){
+  ellipse (pos.x, pos.y, 20, 20);
+}
+
+  }
+  
+  
+
 }
 class Weapon{
   float damage;
