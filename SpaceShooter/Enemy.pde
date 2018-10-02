@@ -21,9 +21,9 @@ class Enemy extends GameObject{
     this.pos.z = pos.z;
 
     this.vel = new PVector();
-    this.vel.x = baseSpeed + level;
-    this.vel.y = baseSpeed + level;
-    this.vel.z = baseSpeed + level;
+    this.vel.x = baseSpeed + level/10;
+    this.vel.y = baseSpeed + level/10;
+    this.vel.z = baseSpeed + level/10;
 
     this.a = new PVector();
     this.a.x = a.x;

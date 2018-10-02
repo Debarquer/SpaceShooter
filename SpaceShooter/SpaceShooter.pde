@@ -128,10 +128,10 @@ void draw(){
           for(int j = 0; j < enemies.size(); j++){
             if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
               if(enemies.get(j).TakeDamage(bullets.get(i).damage)){
-                bullets.get(i).enabled = false;
                 enemies.get(j).enabled = false;
                 score += scoreIncrement;
               }
+              bullets.get(i).enabled = false;
             }
           }
         }

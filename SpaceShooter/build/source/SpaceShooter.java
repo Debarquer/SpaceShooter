@@ -144,10 +144,10 @@ public void draw(){
           for(int j = 0; j < enemies.size(); j++){
             if(BulletEnemyCollision(bullets.get(i), enemies.get(j))){
               if(enemies.get(j).TakeDamage(bullets.get(i).damage)){
-                bullets.get(i).enabled = false;
                 enemies.get(j).enabled = false;
                 score += scoreIncrement;
               }
+              bullets.get(i).enabled = false;
             }
           }
         }
@@ -375,9 +375,9 @@ class Enemy extends GameObject{
     this.pos.z = pos.z;
 
     this.vel = new PVector();
-    this.vel.x = baseSpeed + level;
-    this.vel.y = baseSpeed + level;
-    this.vel.z = baseSpeed + level;
+    this.vel.x = baseSpeed + level/10;
+    this.vel.y = baseSpeed + level/10;
+    this.vel.z = baseSpeed + level/10;
 
     this.a = new PVector();
     this.a.x = a.x;
