@@ -16,7 +16,7 @@ void setup(){
   size(1400, 900);
 
   PVector pos = new PVector(10, 100, 0);
-  PVector vel = new PVector(5, 5, 5);
+  PVector vel = new PVector(7, 7, 7);
   PVector a = new PVector(0, 0, 0);
   PVector colStroke = new PVector(random(255), random(255), random(255));
   PVector colFill = new PVector(random(255), random(255), random(255));
@@ -24,7 +24,7 @@ void setup(){
   float health = 10;
   PVector size = new PVector(20, 15);
 
-  Weapon weapon = new Weapon(1);
+  Weapon weapon = new Weapon(1, 0.3);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
 
   enemies = new ArrayList<Enemy>();

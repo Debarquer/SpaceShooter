@@ -160,16 +160,20 @@ float getAxisRaw(String axis)
 void mouseReleased(){
   //print(buttonA.Clicked(mouseX, mouseY));
 
-  if(playButton.Clicked(mouseX, mouseY)){
-    gameState = GameState.Playing;
-  }
-  else if(highscoreButton.Clicked(mouseX, mouseY)){
-    gameState = GameState.Highscore;
-  }
-	else if(mainMenuButton.Clicked(mouseX, mouseY)){
-    gameState = GameState.MainMenu;
-  }
-  else if(exitButton.Clicked(mouseX, mouseY)){
-    exit();
-  }
+	if(gameState == GameState.MainMenu){
+		if(playButton.Clicked(mouseX, mouseY)){
+	    gameState = GameState.Playing;
+	  }
+	  else if(highscoreButton.Clicked(mouseX, mouseY)){
+	    gameState = GameState.Highscore;
+	  }
+		else if(exitButton.Clicked(mouseX, mouseY)){
+	    exit();
+	  }
+	}
+	else if(gameState == GameState.Highscore){
+		if(mainMenuButton.Clicked(mouseX, mouseY)){
+	    gameState = GameState.MainMenu;
+	  }
+	}
 }

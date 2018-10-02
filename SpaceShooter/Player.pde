@@ -19,6 +19,7 @@ class Player extends GameObject{
     this.size.y = size.y;
 
     this.weapon = weapon;
+    shootTimerMax = weapon.fireRate;
   }
 
   public void Update(){
@@ -29,6 +30,13 @@ class Player extends GameObject{
         shootTimerCurr = 0;
         canFire = true;
       }
+    }
+
+    if(pos.y > height){
+      pos.y = 0;
+    }
+    else if(pos.y < 0){
+      pos.y = height;
     }
 
     rect(pos.x, pos.y, size.x, size.y);

@@ -32,7 +32,7 @@ public void setup(){
   
 
   PVector pos = new PVector(10, 100, 0);
-  PVector vel = new PVector(5, 5, 5);
+  PVector vel = new PVector(7, 7, 7);
   PVector a = new PVector(0, 0, 0);
   PVector colStroke = new PVector(random(255), random(255), random(255));
   PVector colFill = new PVector(random(255), random(255), random(255));
@@ -40,7 +40,7 @@ public void setup(){
   float health = 10;
   PVector size = new PVector(20, 15);
 
-  Weapon weapon = new Weapon(1);
+  Weapon weapon = new Weapon(1, 0.3f);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
 
   enemies = new ArrayList<Enemy>();
@@ -339,9 +339,10 @@ class Enemy extends GameObject{
       enabled = false;
     }
     if(pos.x < -r){
-      sine = !sine;
+      //sine = !sine;
       score -= scoreIncrement;
-      pos.x = width;
+      //pos.x = width;
+      enabled = false;
     }
 
     if(sine)
@@ -664,18 +665,22 @@ public float getAxisRaw(String axis)
 public void mouseReleased(){
   //print(buttonA.Clicked(mouseX, mouseY));
 
-  if(playButton.Clicked(mouseX, mouseY)){
-    gameState = GameState.Playing;
-  }
-  else if(highscoreButton.Clicked(mouseX, mouseY)){
-    gameState = GameState.Highscore;
-  }
-	else if(mainMenuButton.Clicked(mouseX, mouseY)){
-    gameState = GameState.MainMenu;
-  }
-  else if(exitButton.Clicked(mouseX, mouseY)){
-    exit();
-  }
+	if(gameState == GameState.MainMenu){
+		if(playButton.Clicked(mouseX, mouseY)){
+	    gameState = GameState.Playing;
+	  }
+	  else if(highscoreButton.Clicked(mouseX, mouseY)){
+	    gameState = GameState.Highscore;
+	  }
+		else if(exitButton.Clicked(mouseX, mouseY)){
+	    exit();
+	  }
+	}
+	else if(gameState == GameState.Highscore){
+		if(mainMenuButton.Clicked(mouseX, mouseY)){
+	    gameState = GameState.MainMenu;
+	  }
+	}
 }
 class ButtonRect{
   float minX, maxX, minY, maxY;
@@ -743,6 +748,7 @@ class Player extends GameObject{
     this.size.y = size.y;
 
     this.weapon = weapon;
+    shootTimerMax = weapon.fireRate;
   }
 
   public void Update(){
@@ -753,6 +759,13 @@ class Player extends GameObject{
         shootTimerCurr = 0;
         canFire = true;
       }
+    }
+
+    if(pos.y > height){
+      pos.y = 0;
+    }
+    else if(pos.y < 0){
+      pos.y = height;
     }
 
     rect(pos.x, pos.y, size.x, size.y);
@@ -802,13 +815,15 @@ if (score == PowerUpInc){
 }
 class Weapon{
   float damage;
+  float fireRate;
 
   public Weapon(){
 
   }
 
-  public Weapon(float damage){
+  public Weapon(float damage, float fireRate){
     this.damage = damage;
+    this.fireRate = fireRate;
   }
 }
   public void settings() {  size(1400, 900); }

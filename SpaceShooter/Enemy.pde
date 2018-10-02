@@ -40,9 +40,10 @@ class Enemy extends GameObject{
       enabled = false;
     }
     if(pos.x < -r){
-      sine = !sine;
+      //sine = !sine;
       score -= scoreIncrement;
-      pos.x = width;
+      //pos.x = width;
+      enabled = false;
     }
 
     if(sine)
