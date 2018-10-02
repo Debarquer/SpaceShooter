@@ -1,4 +1,4 @@
-enum GameState {MainMenu, Highscore, Paused, Playing};
+enum GameState {MainMenu, Highscore, Paused, Playing, GameOver};
 GameState gameState = GameState.MainMenu;
 
 ArrayList<Enemy> enemies;
@@ -7,7 +7,8 @@ Player player;
 PowerUp powerup;
 Stars stars;
 
-float health = 10;
+float maxHealth = 10;
+float health = maxHealth;
 float score = 0;
 float scoreIncrement = 10;
 float level = 1;
@@ -106,6 +107,8 @@ void draw(){
           if(health <= 0){
             health = 0;
             print("YOU LOSE!\n");
+
+            gameState = GameState.GameOver;
           }
         }
 
@@ -141,10 +144,7 @@ void draw(){
               health = 0;
               print("YOU LOSE!\n");
 
-              saveHighscore();
-
-
-              gameState = GameState.MainMenu;
+              gameState = GameState.GameOver;
             }
           }
         }
@@ -200,6 +200,22 @@ void draw(){
       pressedM = false;
       releasedM = false;
     }
+  }
+  else if(gameState == GameState.GameOver){
+    saveHighscore();
+
+    gameState = GameState.Highscore;
+    DrawHighscore();
+    ResetGame();
+  }
+}
+
+void ResetGame(){
+  score = 0;
+  level = 0;
+  health = maxHealth;
+  for(Enemy enemy : enemies){
+    enemy.enabled = false;
   }
 }
 

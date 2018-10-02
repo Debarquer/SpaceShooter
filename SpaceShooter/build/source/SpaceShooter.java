@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class SpaceShooter extends PApplet {
 
-enum GameState {MainMenu, Highscore, Paused, Playing};
+enum GameState {MainMenu, Highscore, Paused, Playing, GameOver};
 GameState gameState = GameState.MainMenu;
 
 ArrayList<Enemy> enemies;
@@ -23,7 +23,8 @@ Player player;
 PowerUp powerup;
 Stars stars;
 
-float health = 10;
+float maxHealth = 10;
+float health = maxHealth;
 float score = 0;
 float scoreIncrement = 10;
 float level = 1;
@@ -122,6 +123,8 @@ public void draw(){
           if(health <= 0){
             health = 0;
             print("YOU LOSE!\n");
+
+            gameState = GameState.GameOver;
           }
         }
 
@@ -157,10 +160,7 @@ public void draw(){
               health = 0;
               print("YOU LOSE!\n");
 
-              saveHighscore();
-
-
-              gameState = GameState.MainMenu;
+              gameState = GameState.GameOver;
             }
           }
         }
@@ -216,6 +216,22 @@ public void draw(){
       pressedM = false;
       releasedM = false;
     }
+  }
+  else if(gameState == GameState.GameOver){
+    saveHighscore();
+
+    gameState = GameState.Highscore;
+    DrawHighscore();
+    ResetGame();
+  }
+}
+
+public void ResetGame(){
+  score = 0;
+  level = 0;
+  health = maxHealth;
+  for(Enemy enemy : enemies){
+    enemy.enabled = false;
   }
 }
 
@@ -418,6 +434,8 @@ class Enemy extends GameObject{
     if(pos.x < -r){
       //sine = !sine;
       score -= scoreIncrement;
+      if(score <= 0)
+        score = 0;
       //pos.x = width;
       enabled = false;
     }
@@ -549,7 +567,7 @@ public void DrawHighscore(){
   DrawText(32, width/2 - 100, 30, s);
 
   s = loadHighscore();
-  text(s, width/2 - 100, 130);
+  DrawText(32, width/2 - 100, 130, s);
 
   mainMenuImage = loadImage("Resources/MenuButton.png");
   image(mainMenuImage, width/2 - mainMenuImage.width/2, 600);

@@ -10,7 +10,7 @@ void DrawHighscore(){
   DrawText(32, width/2 - 100, 30, s);
 
   s = loadHighscore();
-  text(s, width/2 - 100, 130);
+  DrawText(32, width/2 - 100, 130, s);
 
   mainMenuImage = loadImage("Resources/MenuButton.png");
   image(mainMenuImage, width/2 - mainMenuImage.width/2, 600);

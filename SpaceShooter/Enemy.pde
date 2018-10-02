@@ -80,6 +80,8 @@ class Enemy extends GameObject{
     if(pos.x < -r){
       //sine = !sine;
       score -= scoreIncrement;
+      if(score <= 0)
+        score = 0;
       //pos.x = width;
       enabled = false;
     }
