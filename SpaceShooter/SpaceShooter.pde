@@ -133,6 +133,11 @@ void draw(){
       pressedEscape = false;
       releasedEscape = false;
     }
+    if(pressedM && releasedM){
+      gameState = GameState.MainMenu;
+      pressedM = false;
+      releasedM = false;
+    }
   }
   else if(gameState == GameState.Paused){
     PFont f;
@@ -152,10 +157,10 @@ void draw(){
   else if(gameState == GameState.MainMenu){
     DrawMainMenu();
 
-    if(pressedEscape && releasedEscape){
+    if(pressedM && releasedM){
       gameState = GameState.Playing;
-      pressedEscape = false;
-      releasedEscape = false;
+      pressedM = false;
+      releasedM = false;
     }
   }
 }

@@ -5,6 +5,8 @@ boolean moveDown;
 boolean space;
 boolean pressedEscape;
 boolean releasedEscape;
+boolean pressedM;
+boolean releasedM;
 
 void keyPressed()
 {
@@ -61,6 +63,10 @@ void keyPressed()
 	{
 		pressedEscape = true;
 	}
+	if(key == 'm' || key == 'M')
+	{
+		pressedM = true;
+	}
 }
 
 void keyReleased()
@@ -115,6 +121,10 @@ void keyReleased()
 	if(key == 'p' || key == 'P')
 	{
 		releasedEscape = true;
+	}
+	if(key == 'm' || key == 'M')
+	{
+		releasedM = true;
 	}
 }
 

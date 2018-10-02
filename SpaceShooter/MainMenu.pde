@@ -13,7 +13,11 @@ class ButtonRect{
   }
 }
 
-ButtonRect buttonA;
+PImage playImage;
+PImage exitImage;
+
+ButtonRect playButton;
+ButtonRect exitButton;
 
 void DrawMainMenu(){
   background(155, 155, 155);
@@ -25,16 +29,22 @@ void DrawMainMenu(){
   String s = "Space Shooter";
   text(s, width/2 - 100, 30);
 
-  PImage img;
-  img = loadImage("Resources/PlayButton.png");
-  image(img, width/2 - img.width/2, 200);
-  buttonA = new ButtonRect(width/2 - img.width/2, width/2 + img.width/2, 200, 200+img.height);
+  playImage = loadImage("Resources/PlayButton.png");
+  image(playImage, width/2 - playImage.width/2, 200);
+  playButton = new ButtonRect(width/2 - playImage.width/2, width/2 + playImage.width/2, 200, 200+playImage.height);
+
+  exitImage = loadImage("Resources/ExitButton.png");
+  image(exitImage, width/2 - exitImage.width/2, 400);
+  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 400, 400+exitImage.height);
 }
 
 void mouseReleased(){
   //print(buttonA.Clicked(mouseX, mouseY));
 
-  if(buttonA.Clicked(mouseX, mouseY)){
+  if(playButton.Clicked(mouseX, mouseY)){
     gameState = GameState.Playing;
+  }
+  if(exitButton.Clicked(mouseX, mouseY)){
+    exit();
   }
 }

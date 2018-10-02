@@ -149,6 +149,11 @@ public void draw(){
       pressedEscape = false;
       releasedEscape = false;
     }
+    if(pressedM && releasedM){
+      gameState = GameState.MainMenu;
+      pressedM = false;
+      releasedM = false;
+    }
   }
   else if(gameState == GameState.Paused){
     PFont f;
@@ -168,10 +173,10 @@ public void draw(){
   else if(gameState == GameState.MainMenu){
     DrawMainMenu();
 
-    if(pressedEscape && releasedEscape){
+    if(pressedM && releasedM){
       gameState = GameState.Playing;
-      pressedEscape = false;
-      releasedEscape = false;
+      pressedM = false;
+      releasedM = false;
     }
   }
 }
@@ -447,6 +452,8 @@ boolean moveDown;
 boolean space;
 boolean pressedEscape;
 boolean releasedEscape;
+boolean pressedM;
+boolean releasedM;
 
 public void keyPressed()
 {
@@ -503,6 +510,10 @@ public void keyPressed()
 	{
 		pressedEscape = true;
 	}
+	if(key == 'm' || key == 'M')
+	{
+		pressedM = true;
+	}
 }
 
 public void keyReleased()
@@ -558,6 +569,10 @@ public void keyReleased()
 	{
 		releasedEscape = true;
 	}
+	if(key == 'm' || key == 'M')
+	{
+		releasedM = true;
+	}
 }
 
 public float getAxisRaw(String axis)
@@ -603,7 +618,11 @@ class ButtonRect{
   }
 }
 
-ButtonRect buttonA;
+PImage playImage;
+PImage exitImage;
+
+ButtonRect playButton;
+ButtonRect exitButton;
 
 public void DrawMainMenu(){
   background(155, 155, 155);
@@ -615,17 +634,23 @@ public void DrawMainMenu(){
   String s = "Space Shooter";
   text(s, width/2 - 100, 30);
 
-  PImage img;
-  img = loadImage("Resources/PlayButton.png");
-  image(img, width/2 - img.width/2, 200);
-  buttonA = new ButtonRect(width/2 - img.width/2, width/2 + img.width/2, 200, 200+img.height);
+  playImage = loadImage("Resources/PlayButton.png");
+  image(playImage, width/2 - playImage.width/2, 200);
+  playButton = new ButtonRect(width/2 - playImage.width/2, width/2 + playImage.width/2, 200, 200+playImage.height);
+
+  exitImage = loadImage("Resources/ExitButton.png");
+  image(exitImage, width/2 - exitImage.width/2, 400);
+  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 400, 400+exitImage.height);
 }
 
 public void mouseReleased(){
   //print(buttonA.Clicked(mouseX, mouseY));
 
-  if(buttonA.Clicked(mouseX, mouseY)){
+  if(playButton.Clicked(mouseX, mouseY)){
     gameState = GameState.Playing;
+  }
+  if(exitButton.Clicked(mouseX, mouseY)){
+    exit();
   }
 }
 class Player extends GameObject{
