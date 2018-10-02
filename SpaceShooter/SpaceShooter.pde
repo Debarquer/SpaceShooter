@@ -1,4 +1,4 @@
-enum GameState {MainMenu, Paused, Playing};
+enum GameState {MainMenu, Highscore, Paused, Playing};
 GameState gameState = GameState.MainMenu;
 
 ArrayList<Enemy> enemies;
@@ -101,7 +101,11 @@ void draw(){
             if(health <= 0){
               health = 0;
               print("YOU LOSE!\n");
-              //exit();
+
+              saveHighscore();
+
+
+              gameState = GameState.MainMenu;
             }
           }
         }
@@ -156,6 +160,15 @@ void draw(){
   }
   else if(gameState == GameState.MainMenu){
     DrawMainMenu();
+
+    if(pressedM && releasedM){
+      gameState = GameState.Playing;
+      pressedM = false;
+      releasedM = false;
+    }
+  }
+  else if(gameState == GameState.Highscore){
+    DrawHighscore();
 
     if(pressedM && releasedM){
       gameState = GameState.Playing;

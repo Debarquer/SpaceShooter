@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class SpaceShooter extends PApplet {
 
-enum GameState {MainMenu, Paused, Playing};
+enum GameState {MainMenu, Highscore, Paused, Playing};
 GameState gameState = GameState.MainMenu;
 
 ArrayList<Enemy> enemies;
@@ -117,7 +117,11 @@ public void draw(){
             if(health <= 0){
               health = 0;
               print("YOU LOSE!\n");
-              //exit();
+
+              saveHighscore();
+
+
+              gameState = GameState.MainMenu;
             }
           }
         }
@@ -172,6 +176,15 @@ public void draw(){
   }
   else if(gameState == GameState.MainMenu){
     DrawMainMenu();
+
+    if(pressedM && releasedM){
+      gameState = GameState.Playing;
+      pressedM = false;
+      releasedM = false;
+    }
+  }
+  else if(gameState == GameState.Highscore){
+    DrawHighscore();
 
     if(pressedM && releasedM){
       gameState = GameState.Playing;
@@ -445,6 +458,50 @@ abstract class GameObject{
 
   }
 }
+
+PImage mainMenuImage;
+
+ButtonRect mainMenuButton;
+
+public void DrawHighscore(){
+  background(155, 155, 155);
+  PFont f;
+  f = createFont("Arial", 32, true);
+  textFont(f, 32);
+  fill(0, 0, 0);
+
+  String s = "Highscore";
+  text(s, width/2 - 100, 30);
+
+  s = loadHighscore();
+  text(s, width/2 - 100, 130);
+
+  mainMenuImage = loadImage("Resources/MenuButton.png");
+  image(mainMenuImage, width/2 - mainMenuImage.width/2, 600);
+  mainMenuButton = new ButtonRect(width/2 - mainMenuImage.width/2, width/2 + mainMenuImage.width/2, 600, 600+mainMenuImage.height);
+}
+
+public void saveHighscore(){
+  String[] highscores = loadStrings("data/highscores.txt");
+  String[] tmp = new String[highscores.length + 1];
+  for(int i = 0; i < highscores.length; i++){
+
+    tmp[i] = highscores[i];
+  }
+  tmp[tmp.length - 1] = ""+(int)score;
+
+  saveStrings(dataPath("highscores.txt"), tmp);
+}
+
+public String loadHighscore(){
+  String[] highscores = loadStrings("data/highscores.txt");
+
+  String s = "";
+  for(String string : highscores){
+    s += string + "\n";
+  }
+  return s;
+}
 boolean moveLeft;
 boolean moveRight;
 boolean moveUp;
@@ -603,6 +660,23 @@ public float getAxisRaw(String axis)
 
 	return 0;
 }
+
+public void mouseReleased(){
+  //print(buttonA.Clicked(mouseX, mouseY));
+
+  if(playButton.Clicked(mouseX, mouseY)){
+    gameState = GameState.Playing;
+  }
+  else if(highscoreButton.Clicked(mouseX, mouseY)){
+    gameState = GameState.Highscore;
+  }
+	else if(mainMenuButton.Clicked(mouseX, mouseY)){
+    gameState = GameState.MainMenu;
+  }
+  else if(exitButton.Clicked(mouseX, mouseY)){
+    exit();
+  }
+}
 class ButtonRect{
   float minX, maxX, minY, maxY;
 
@@ -619,9 +693,11 @@ class ButtonRect{
 }
 
 PImage playImage;
+PImage highscoreImage;
 PImage exitImage;
 
 ButtonRect playButton;
+ButtonRect highscoreButton;
 ButtonRect exitButton;
 
 public void DrawMainMenu(){
@@ -638,20 +714,13 @@ public void DrawMainMenu(){
   image(playImage, width/2 - playImage.width/2, 200);
   playButton = new ButtonRect(width/2 - playImage.width/2, width/2 + playImage.width/2, 200, 200+playImage.height);
 
+  highscoreImage = loadImage("Resources/HighscoreButton.png");
+  image(highscoreImage, width/2 - highscoreImage.width/2, 400);
+  highscoreButton = new ButtonRect(width/2 - highscoreImage.width/2, width/2 + highscoreImage.width/2, 400, 400+highscoreImage.height);
+
   exitImage = loadImage("Resources/ExitButton.png");
-  image(exitImage, width/2 - exitImage.width/2, 400);
-  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 400, 400+exitImage.height);
-}
-
-public void mouseReleased(){
-  //print(buttonA.Clicked(mouseX, mouseY));
-
-  if(playButton.Clicked(mouseX, mouseY)){
-    gameState = GameState.Playing;
-  }
-  if(exitButton.Clicked(mouseX, mouseY)){
-    exit();
-  }
+  image(exitImage, width/2 - exitImage.width/2, 600);
+  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
 }
 class Player extends GameObject{
   PVector size;

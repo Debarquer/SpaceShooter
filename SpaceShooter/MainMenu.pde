@@ -14,9 +14,11 @@ class ButtonRect{
 }
 
 PImage playImage;
+PImage highscoreImage;
 PImage exitImage;
 
 ButtonRect playButton;
+ButtonRect highscoreButton;
 ButtonRect exitButton;
 
 void DrawMainMenu(){
@@ -33,18 +35,11 @@ void DrawMainMenu(){
   image(playImage, width/2 - playImage.width/2, 200);
   playButton = new ButtonRect(width/2 - playImage.width/2, width/2 + playImage.width/2, 200, 200+playImage.height);
 
+  highscoreImage = loadImage("Resources/HighscoreButton.png");
+  image(highscoreImage, width/2 - highscoreImage.width/2, 400);
+  highscoreButton = new ButtonRect(width/2 - highscoreImage.width/2, width/2 + highscoreImage.width/2, 400, 400+highscoreImage.height);
+
   exitImage = loadImage("Resources/ExitButton.png");
-  image(exitImage, width/2 - exitImage.width/2, 400);
-  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 400, 400+exitImage.height);
-}
-
-void mouseReleased(){
-  //print(buttonA.Clicked(mouseX, mouseY));
-
-  if(playButton.Clicked(mouseX, mouseY)){
-    gameState = GameState.Playing;
-  }
-  if(exitButton.Clicked(mouseX, mouseY)){
-    exit();
-  }
+  image(exitImage, width/2 - exitImage.width/2, 600);
+  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
 }
