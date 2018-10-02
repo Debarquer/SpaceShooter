@@ -54,6 +54,7 @@ class Enemy extends GameObject{
     fill(colFill.x, colFill.y, colFill.z);
     ellipseMode(RADIUS);
     ellipse(pos.x, pos.y, r, r);
+    //ellipse(pos.x, pos.y, currHealth/this.health*r, currHealth/this.health*r);
 
     PFont f;
     f = createFont("Arial", 16, true);

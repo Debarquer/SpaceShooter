@@ -5,13 +5,9 @@ ButtonRect mainMenuButton;
 
 void DrawHighscore(){
   background(155, 155, 155);
-  PFont f;
-  f = createFont("Arial", 32, true);
-  textFont(f, 32);
-  fill(0, 0, 0);
 
   String s = "Highscore";
-  text(s, width/2 - 100, 30);
+  DrawText(32, width/2 - 100, 30, s);
 
   s = loadHighscore();
   text(s, width/2 - 100, 130);

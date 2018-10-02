@@ -41,13 +41,9 @@ void draw(){
   if(gameState == GameState.Playing){
     background(0, 255, 255);
     stars.UpdateStars();
-    PFont f;
-    f = createFont("Arial", 32, true);
-    textFont(f, 32);
-    fill(0, 0, 0);
 
     String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
-    text(s, 30, 30);
+    DrawText(32, 30, 30, s);
 
     if(enemies.size() <= 0){
       level++;
@@ -120,16 +116,7 @@ void draw(){
     if(space && player.canFire){
       player.canFire = false;
 
-      float r = 5;
-      PVector pos = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - r/2, player.pos.z);
-      PVector vel = new PVector(10, 10, 10);
-      PVector a = new PVector(0, 0, 0);
-      PVector colStroke = new PVector(0, 255, 0);
-      PVector colFill = new PVector(0, 0, 0);
-      float health = 1;
-
-      Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true, player.weapon.damage);
-      bullets.add(bullet);
+      player.Shoot();
     }
 
     if(pressedEscape && releasedEscape){
@@ -144,13 +131,8 @@ void draw(){
     }
   }
   else if(gameState == GameState.Paused){
-    PFont f;
-    f = createFont("Arial", 64, true);
-    textFont(f, 64);
-    fill(0, 0, 0);
 
-    String s = "Paused";
-    text(s, width/2, height/2);
+    DrawText(64, width/2, height/2, "Paused");
 
     if(pressedEscape && releasedEscape){
       gameState = GameState.Playing;
@@ -187,7 +169,7 @@ void SpawnEnemies(){
     PVector pos = new PVector(x, 0, 0);
     PVector vel = new PVector(2, 2, 2);
     PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(0, 255, 0);
+    PVector colStroke = new PVector(0, 0, 0);
     PVector colFill = new PVector(255, 0, 0);
     float health = 1 + 2*(level-1);
     float angle = i * 3;
@@ -195,4 +177,13 @@ void SpawnEnemies(){
     Enemy enemy = new Enemy(pos, vel, a, colStroke, colFill, r, health, angle);
     enemies.add(enemy);
   }
+}
+
+void DrawText(float size, float x, float y, String s){
+  PFont f;
+  f = createFont("Arial", size, true);
+  textFont(f, size);
+  fill(0, 0, 0);
+
+  text(s, x, y);
 }

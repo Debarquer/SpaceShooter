@@ -57,13 +57,9 @@ public void draw(){
   if(gameState == GameState.Playing){
     background(0, 255, 255);
     stars.UpdateStars();
-    PFont f;
-    f = createFont("Arial", 32, true);
-    textFont(f, 32);
-    fill(0, 0, 0);
 
     String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
-    text(s, 30, 30);
+    DrawText(32, 30, 30, s);
 
     if(enemies.size() <= 0){
       level++;
@@ -136,16 +132,7 @@ public void draw(){
     if(space && player.canFire){
       player.canFire = false;
 
-      float r = 5;
-      PVector pos = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - r/2, player.pos.z);
-      PVector vel = new PVector(10, 10, 10);
-      PVector a = new PVector(0, 0, 0);
-      PVector colStroke = new PVector(0, 255, 0);
-      PVector colFill = new PVector(0, 0, 0);
-      float health = 1;
-
-      Bullet bullet = new Bullet(pos, vel, a, colStroke, colFill, r, health, true, player.weapon.damage);
-      bullets.add(bullet);
+      player.Shoot();
     }
 
     if(pressedEscape && releasedEscape){
@@ -160,13 +147,8 @@ public void draw(){
     }
   }
   else if(gameState == GameState.Paused){
-    PFont f;
-    f = createFont("Arial", 64, true);
-    textFont(f, 64);
-    fill(0, 0, 0);
 
-    String s = "Paused";
-    text(s, width/2, height/2);
+    DrawText(64, width/2, height/2, "Paused");
 
     if(pressedEscape && releasedEscape){
       gameState = GameState.Playing;
@@ -203,7 +185,7 @@ public void SpawnEnemies(){
     PVector pos = new PVector(x, 0, 0);
     PVector vel = new PVector(2, 2, 2);
     PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(0, 255, 0);
+    PVector colStroke = new PVector(0, 0, 0);
     PVector colFill = new PVector(255, 0, 0);
     float health = 1 + 2*(level-1);
     float angle = i * 3;
@@ -211,6 +193,15 @@ public void SpawnEnemies(){
     Enemy enemy = new Enemy(pos, vel, a, colStroke, colFill, r, health, angle);
     enemies.add(enemy);
   }
+}
+
+public void DrawText(float size, float x, float y, String s){
+  PFont f;
+  f = createFont("Arial", size, true);
+  textFont(f, size);
+  fill(0, 0, 0);
+
+  text(s, x, y);
 }
 class Stars{
   ArrayList<Star> stars;
@@ -353,6 +344,7 @@ class Enemy extends GameObject{
     fill(colFill.x, colFill.y, colFill.z);
     ellipseMode(RADIUS);
     ellipse(pos.x, pos.y, r, r);
+    //ellipse(pos.x, pos.y, currHealth/this.health*r, currHealth/this.health*r);
 
     PFont f;
     f = createFont("Arial", 16, true);
@@ -466,13 +458,9 @@ ButtonRect mainMenuButton;
 
 public void DrawHighscore(){
   background(155, 155, 155);
-  PFont f;
-  f = createFont("Arial", 32, true);
-  textFont(f, 32);
-  fill(0, 0, 0);
 
   String s = "Highscore";
-  text(s, width/2 - 100, 30);
+  DrawText(32, width/2 - 100, 30, s);
 
   s = loadHighscore();
   text(s, width/2 - 100, 130);
@@ -707,13 +695,9 @@ ButtonRect exitButton;
 
 public void DrawMainMenu(){
   background(155, 155, 155);
-  PFont f;
-  f = createFont("Arial", 32, true);
-  textFont(f, 32);
-  fill(0, 0, 0);
 
   String s = "Space Shooter";
-  text(s, width/2 - 100, 30);
+  DrawText(32, width/2 - 100, 30, s);
 
   playImage = loadImage("Resources/PlayButton.png");
   image(playImage, width/2 - playImage.width/2, 200);
@@ -783,6 +767,19 @@ class Player extends GameObject{
     }
     else if(moveUp)
       pos.y -= vel.y;
+  }
+
+  public void Shoot(){
+    float rBullet = 5;
+    PVector posBullet = new PVector(pos.x + size.x, pos.y + size.y/2 - r/2, pos.z);
+    PVector velBullet = new PVector(10, 10, 10);
+    PVector aBullet = new PVector(0, 0, 0);
+    PVector colStrokeBullet = new PVector(0, 0, 0);
+    PVector colFillBullet = new PVector(0, 255, 0);
+    float healthBullet = 1;
+
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, weapon.damage);
+    bullets.add(bullet);
   }
 }
 class PowerUp extends GameObject{

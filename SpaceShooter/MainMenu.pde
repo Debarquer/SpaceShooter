@@ -23,13 +23,9 @@ ButtonRect exitButton;
 
 void DrawMainMenu(){
   background(155, 155, 155);
-  PFont f;
-  f = createFont("Arial", 32, true);
-  textFont(f, 32);
-  fill(0, 0, 0);
 
   String s = "Space Shooter";
-  text(s, width/2 - 100, 30);
+  DrawText(32, width/2 - 100, 30, s);
 
   playImage = loadImage("Resources/PlayButton.png");
   image(playImage, width/2 - playImage.width/2, 200);

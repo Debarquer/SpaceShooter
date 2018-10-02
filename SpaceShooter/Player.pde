@@ -55,4 +55,17 @@ class Player extends GameObject{
     else if(moveUp)
       pos.y -= vel.y;
   }
+
+  void Shoot(){
+    float rBullet = 5;
+    PVector posBullet = new PVector(pos.x + size.x, pos.y + size.y/2 - r/2, pos.z);
+    PVector velBullet = new PVector(10, 10, 10);
+    PVector aBullet = new PVector(0, 0, 0);
+    PVector colStrokeBullet = new PVector(0, 0, 0);
+    PVector colFillBullet = new PVector(0, 255, 0);
+    float healthBullet = 1;
+
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, weapon.damage);
+    bullets.add(bullet);
+  }
 }
