@@ -7,8 +7,46 @@ class Enemy extends GameObject{
   float shootTimerCurr = 0;
   boolean canFire = true;
 
+  float baseSpeed = 5;
+  float baseHealth = 1;
+
   public Enemy(){
     super();
+  }
+
+  public Enemy(float level, float angle, PVector pos, float r){
+    this.pos = new PVector();
+    this.pos.x = pos.x;
+    this.pos.y = pos.y;
+    this.pos.z = pos.z;
+
+    this.vel = new PVector();
+    this.vel.x = baseSpeed + level;
+    this.vel.y = baseSpeed + level;
+    this.vel.z = baseSpeed + level;
+
+    this.a = new PVector();
+    this.a.x = a.x;
+    this.a.y = a.y;
+    this.a.z = a.z;
+
+    this.colStroke = new PVector();
+    this.colStroke.x = 0;
+    this.colStroke.y = 0;
+    this.colStroke.z = 0;
+
+    this.colFill = new PVector();
+    this.colFill.x = 255;
+    this.colFill.y = 0;
+    this.colFill.z = 0;
+
+    this.r = r;
+    this.currHealth = this.health = baseHealth + level;
+
+    enabled = true;
+
+    this.angle = angle;
+    amplitude = 100;
   }
 
   public Enemy(PVector pos, PVector vel, PVector a, PVector colStroke, PVector colFill, float r, float health, float angle){

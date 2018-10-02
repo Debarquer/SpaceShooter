@@ -46,8 +46,8 @@ abstract class GameObject{
   }
 
   public void Update(){
-    stroke(colStroke.x, colStroke.y,colStroke.z);
-    fill(colFill.x, colFill.y, colFill.z);
+    //stroke(colStroke.x, colStroke.y,colStroke.z);
+    //fill(colFill.x, colFill.y, colFill.z);
   }
 
   public void Move(){

@@ -39,6 +39,8 @@ class Player extends GameObject{
       pos.y = height;
     }
 
+    fill(colFill.x, colFill.y, colFill.z);
+    stroke(colStroke.x,colStroke.y, colStroke.z);
     rect(pos.x, pos.y, size.x, size.y);
   }
 

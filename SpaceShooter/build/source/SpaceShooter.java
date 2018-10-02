@@ -28,6 +28,17 @@ float score = 0;
 float scoreIncrement = 10;
 float level = 1;
 
+PImage BGAImage;
+PImage BGBImage;
+PImage BGCImage;
+PImage BGDImage;
+PImage BGEImage;
+float BGAPos = 0;
+float BGBPos = 0;
+float BGCPos = 0;
+float BGDPos = 0;
+float BGEPos = 0;
+
 public void setup(){
   
 
@@ -50,13 +61,45 @@ public void setup(){
   powerup = new PowerUp();
 
   stars = new Stars();
+
+  BGAImage = loadImage("Resources/BGA.png");
+  BGBImage = loadImage("Resources/BGB.png");
+  BGCImage = loadImage("Resources/BGC.png");
+  BGDImage = loadImage("Resources/BGD.png");
+  BGEImage = loadImage("Resources/BGE.png");
 }
 
 public void draw(){
   //print(gameState + "\n");
   if(gameState == GameState.Playing){
-    background(0, 255, 255);
-    stars.UpdateStars();
+    background(0, 0, 55);
+    //stars.UpdateStars();
+
+    image(BGEImage, BGEPos, 0, 5600, 900);
+    image(BGDImage, BGDPos, 0, 5600, 900);
+    image(BGCImage, BGCPos, 0, 5600, 900);
+    image(BGBImage, BGBPos, 0, 5600, 900);
+    image(BGAImage, BGAPos, 0, 5600, 900);
+    BGAPos-=5;
+    if(BGAPos < -BGAImage.width/2){
+      BGAPos = 0;
+    }
+    BGBPos-=4;
+    if(BGBPos < -BGBImage.width/2){
+      BGBPos = 0;
+    }
+    BGCPos-=3;
+    if(BGCPos < -BGCImage.width/2){
+      BGCPos = 0;
+    }
+    BGDPos-=2;
+    if(BGDPos < -BGDImage.width/2){
+      BGDPos = 0;
+    }
+    BGEPos-=1;
+    if(BGEPos < -BGEImage.width/2){
+      BGEPos = 0;
+    }
 
     String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
     DrawText(32, 30, 30, s);
@@ -179,19 +222,10 @@ public void draw(){
 public void SpawnEnemies(){
   for(int i = 0; i < 6; i++){
     float r = 30;
-    float margin = 5;
     float x = width + (i * (r + 50));
-    //float x = width/2;
-    PVector pos = new PVector(x, 0, 0);
-    PVector vel = new PVector(2, 2, 2);
-    PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(0, 0, 0);
-    PVector colFill = new PVector(255, 0, 0);
-    float health = 1 + 2*(level-1);
     float angle = i * 3;
 
-    Enemy enemy = new Enemy(pos, vel, a, colStroke, colFill, r, health, angle);
-    enemies.add(enemy);
+    enemies.add(new Enemy(level, angle, new PVector(x, 0, 0), r));
   }
 }
 
@@ -267,6 +301,9 @@ class Bullet extends GameObject{
       enabled = false;
     }
 
+    fill(colFill.x, colFill.y, colFill.z);
+    stroke(colStroke.x,colStroke.y, colStroke.z);
+    
     ellipseMode(RADIUS);
     ellipse(pos.x, pos.y, r, r);
   }
@@ -297,8 +334,46 @@ class Enemy extends GameObject{
   float shootTimerCurr = 0;
   boolean canFire = true;
 
+  float baseSpeed = 5;
+  float baseHealth = 1;
+
   public Enemy(){
     super();
+  }
+
+  public Enemy(float level, float angle, PVector pos, float r){
+    this.pos = new PVector();
+    this.pos.x = pos.x;
+    this.pos.y = pos.y;
+    this.pos.z = pos.z;
+
+    this.vel = new PVector();
+    this.vel.x = baseSpeed + level;
+    this.vel.y = baseSpeed + level;
+    this.vel.z = baseSpeed + level;
+
+    this.a = new PVector();
+    this.a.x = a.x;
+    this.a.y = a.y;
+    this.a.z = a.z;
+
+    this.colStroke = new PVector();
+    this.colStroke.x = 0;
+    this.colStroke.y = 0;
+    this.colStroke.z = 0;
+
+    this.colFill = new PVector();
+    this.colFill.x = 255;
+    this.colFill.y = 0;
+    this.colFill.z = 0;
+
+    this.r = r;
+    this.currHealth = this.health = baseHealth + level;
+
+    enabled = true;
+
+    this.angle = angle;
+    amplitude = 100;
   }
 
   public Enemy(PVector pos, PVector vel, PVector a, PVector colStroke, PVector colFill, float r, float health, float angle){
@@ -439,8 +514,8 @@ abstract class GameObject{
   }
 
   public void Update(){
-    stroke(colStroke.x, colStroke.y,colStroke.z);
-    fill(colFill.x, colFill.y, colFill.z);
+    //stroke(colStroke.x, colStroke.y,colStroke.z);
+    //fill(colFill.x, colFill.y, colFill.z);
   }
 
   public void Move(){
@@ -752,6 +827,8 @@ class Player extends GameObject{
       pos.y = height;
     }
 
+    fill(colFill.x, colFill.y, colFill.z);
+    stroke(colStroke.x,colStroke.y, colStroke.z);
     rect(pos.x, pos.y, size.x, size.y);
   }
 

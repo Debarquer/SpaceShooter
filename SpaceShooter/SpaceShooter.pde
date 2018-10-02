@@ -12,6 +12,17 @@ float score = 0;
 float scoreIncrement = 10;
 float level = 1;
 
+PImage BGAImage;
+PImage BGBImage;
+PImage BGCImage;
+PImage BGDImage;
+PImage BGEImage;
+float BGAPos = 0;
+float BGBPos = 0;
+float BGCPos = 0;
+float BGDPos = 0;
+float BGEPos = 0;
+
 void setup(){
   size(1400, 900);
 
@@ -34,13 +45,45 @@ void setup(){
   powerup = new PowerUp();
 
   stars = new Stars();
+
+  BGAImage = loadImage("Resources/BGA.png");
+  BGBImage = loadImage("Resources/BGB.png");
+  BGCImage = loadImage("Resources/BGC.png");
+  BGDImage = loadImage("Resources/BGD.png");
+  BGEImage = loadImage("Resources/BGE.png");
 }
 
 void draw(){
   //print(gameState + "\n");
   if(gameState == GameState.Playing){
-    background(0, 255, 255);
-    stars.UpdateStars();
+    background(0, 0, 55);
+    //stars.UpdateStars();
+
+    image(BGEImage, BGEPos, 0, 5600, 900);
+    image(BGDImage, BGDPos, 0, 5600, 900);
+    image(BGCImage, BGCPos, 0, 5600, 900);
+    image(BGBImage, BGBPos, 0, 5600, 900);
+    image(BGAImage, BGAPos, 0, 5600, 900);
+    BGAPos-=5;
+    if(BGAPos < -BGAImage.width/2){
+      BGAPos = 0;
+    }
+    BGBPos-=4;
+    if(BGBPos < -BGBImage.width/2){
+      BGBPos = 0;
+    }
+    BGCPos-=3;
+    if(BGCPos < -BGCImage.width/2){
+      BGCPos = 0;
+    }
+    BGDPos-=2;
+    if(BGDPos < -BGDImage.width/2){
+      BGDPos = 0;
+    }
+    BGEPos-=1;
+    if(BGEPos < -BGEImage.width/2){
+      BGEPos = 0;
+    }
 
     String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
     DrawText(32, 30, 30, s);
@@ -163,19 +206,10 @@ void draw(){
 void SpawnEnemies(){
   for(int i = 0; i < 6; i++){
     float r = 30;
-    float margin = 5;
     float x = width + (i * (r + 50));
-    //float x = width/2;
-    PVector pos = new PVector(x, 0, 0);
-    PVector vel = new PVector(2, 2, 2);
-    PVector a = new PVector(0, 0, 0);
-    PVector colStroke = new PVector(0, 0, 0);
-    PVector colFill = new PVector(255, 0, 0);
-    float health = 1 + 2*(level-1);
     float angle = i * 3;
 
-    Enemy enemy = new Enemy(pos, vel, a, colStroke, colFill, r, health, angle);
-    enemies.add(enemy);
+    enemies.add(new Enemy(level, angle, new PVector(x, 0, 0), r));
   }
 }
 
