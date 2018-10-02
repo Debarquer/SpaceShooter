@@ -15,7 +15,7 @@ import java.io.IOException;
 public class SpaceShooter extends PApplet {
 
 enum GameState {MainMenu, Paused, Playing};
-GameState gameState = GameState.Playing;
+GameState gameState = GameState.MainMenu;
 
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
@@ -53,10 +53,10 @@ public void setup(){
 }
 
 public void draw(){
-  print(gameState + "\n");
+  //print(gameState + "\n");
   if(gameState == GameState.Playing){
     background(0, 255, 255);
-    //stars.UpdateStars();
+    stars.UpdateStars();
     PFont f;
     f = createFont("Arial", 32, true);
     textFont(f, 32);
@@ -150,7 +150,7 @@ public void draw(){
       releasedEscape = false;
     }
   }
-  else{
+  else if(gameState == GameState.Paused){
     PFont f;
     f = createFont("Arial", 64, true);
     textFont(f, 64);
@@ -158,6 +158,15 @@ public void draw(){
 
     String s = "Paused";
     text(s, width/2, height/2);
+
+    if(pressedEscape && releasedEscape){
+      gameState = GameState.Playing;
+      pressedEscape = false;
+      releasedEscape = false;
+    }
+  }
+  else if(gameState == GameState.MainMenu){
+    DrawMainMenu();
 
     if(pressedEscape && releasedEscape){
       gameState = GameState.Playing;
@@ -578,6 +587,46 @@ public float getAxisRaw(String axis)
 	}
 
 	return 0;
+}
+class ButtonRect{
+  float minX, maxX, minY, maxY;
+
+  public ButtonRect(float minX, float maxX, float minY, float maxY){
+    this.minX = minX;
+    this.maxX = maxX;
+    this.minY = minY;
+    this.maxY = maxY;
+  }
+
+  public boolean Clicked(float x, float y){
+    return x > minX && x < maxX && y > minY && y < maxY;
+  }
+}
+
+ButtonRect buttonA;
+
+public void DrawMainMenu(){
+  background(155, 155, 155);
+  PFont f;
+  f = createFont("Arial", 32, true);
+  textFont(f, 32);
+  fill(0, 0, 0);
+
+  String s = "Space Shooter";
+  text(s, width/2 - 100, 30);
+
+  PImage img;
+  img = loadImage("Resources/PlayButton.png");
+  image(img, width/2 - img.width/2, 200);
+  buttonA = new ButtonRect(width/2 - img.width/2, width/2 + img.width/2, 200, 200+img.height);
+}
+
+public void mouseReleased(){
+  //print(buttonA.Clicked(mouseX, mouseY));
+
+  if(buttonA.Clicked(mouseX, mouseY)){
+    gameState = GameState.Playing;
+  }
 }
 class Player extends GameObject{
   PVector size;

@@ -1,5 +1,5 @@
 enum GameState {MainMenu, Paused, Playing};
-GameState gameState = GameState.Playing;
+GameState gameState = GameState.MainMenu;
 
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
@@ -37,7 +37,7 @@ void setup(){
 }
 
 void draw(){
-  print(gameState + "\n");
+  //print(gameState + "\n");
   if(gameState == GameState.Playing){
     background(0, 255, 255);
     stars.UpdateStars();
@@ -134,7 +134,7 @@ void draw(){
       releasedEscape = false;
     }
   }
-  else{
+  else if(gameState == GameState.Paused){
     PFont f;
     f = createFont("Arial", 64, true);
     textFont(f, 64);
@@ -142,6 +142,15 @@ void draw(){
 
     String s = "Paused";
     text(s, width/2, height/2);
+
+    if(pressedEscape && releasedEscape){
+      gameState = GameState.Playing;
+      pressedEscape = false;
+      releasedEscape = false;
+    }
+  }
+  else if(gameState == GameState.MainMenu){
+    DrawMainMenu();
 
     if(pressedEscape && releasedEscape){
       gameState = GameState.Playing;
