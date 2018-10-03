@@ -57,7 +57,7 @@ void setup(){
 
 void draw(){
   //print(gameState + "\n");
- 
+
 
   if(gameState == GameState.Playing){
     background(0, 0, 55);
@@ -136,6 +136,10 @@ void draw(){
               }
               bullets.get(i).enabled = false;
             }
+          }
+          if(BulletEnemyCollision(bullets.get(i), powerup)){
+            //get powered up
+            bullets.get(i).enabled = false;
           }
         }
         else{
@@ -223,7 +227,7 @@ void ResetGame(){
 }
 
 void SpawnEnemies(){
-  
+
   if (level % 3 == 0){
  powerup.RandNum();
   }

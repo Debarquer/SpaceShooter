@@ -21,6 +21,7 @@ ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
 PowerUp powerup;
+
 Stars stars;
 
 float maxHealth = 10;
@@ -54,12 +55,12 @@ public void setup(){
 
   Weapon weapon = new Weapon(1, 0.3f);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-
+  powerup = new PowerUp();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
   bullets = new ArrayList<Bullet>();
-  powerup = new PowerUp();
+
 
   stars = new Stars();
 
@@ -72,6 +73,8 @@ public void setup(){
 
 public void draw(){
   //print(gameState + "\n");
+
+
   if(gameState == GameState.Playing){
     background(0, 0, 55);
     //stars.UpdateStars();
@@ -101,7 +104,7 @@ public void draw(){
     if(BGEPos < -BGEImage.width/2){
       BGEPos = 0;
     }
-
+   powerup.update();
     String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
     DrawText(32, 30, 30, s);
 
@@ -109,7 +112,7 @@ public void draw(){
       level++;
       SpawnEnemies();
     }
-    powerup.update();
+
     player.Move();
     player.Update();
 
@@ -149,6 +152,10 @@ public void draw(){
               }
               bullets.get(i).enabled = false;
             }
+          }
+          if(BulletEnemyCollision(bullets.get(i), powerup)){
+            //get powered up
+            bullets.get(i).enabled = false;
           }
         }
         else{
@@ -236,6 +243,10 @@ public void ResetGame(){
 }
 
 public void SpawnEnemies(){
+
+  if (level % 3 == 0){
+ powerup.RandNum();
+  }
   for(int i = 0; i < 6; i++){
     float r = 30;
     float x = width + (i * (r + 50));
@@ -341,12 +352,20 @@ class Bullet extends GameObject{
     pos.x += vel.x;
   }
 }
-public boolean BulletEnemyCollision(Bullet bullet, Enemy enemy){
-  // if(bullet.pos.x + bullet.r > enemy.pos.x && bullet.pos.x < enemy.pos.x + enemy.r && bullet.pos.y + bullet.r > enemy.pos.y && bullet.pos.y < enemy.pos.y + enemy.r){
-  //   return true;
-  // }
+public boolean BulletEnemyCollision(Bullet bullet, GameObject other){
 
-  return dist(bullet.pos.x, bullet.pos.y, enemy.pos.x, enemy.pos.y) < bullet.r + enemy.r;
+  if(dist(bullet.pos.x, bullet.pos.y, other.pos.x, other.pos.y) < bullet.r + other.r){
+    print("Collision\n");
+    if(other instanceof PowerUp){
+      print("With PowerUp\n");
+      ((PowerUp)other).activate();
+    }
+
+    return true;
+  }
+  else{
+    return false;
+  }
 }
 
 public boolean BulletPlayerCollision(GameObject bullet, Player player){
@@ -395,7 +414,7 @@ class Enemy extends GameObject{
     this.colFill.z = 0;
 
     this.r = r;
-    this.currHealth = this.health = baseHealth + level;
+    this.currHealth = this.health = baseHealth /*+ level*/;
 
     enabled = true;
 
@@ -560,18 +579,37 @@ PImage mainMenuImage;
 
 ButtonRect mainMenuButton;
 
+float topBoundary = 100;
+float bottomBoundary = 400;
+float highscoreAnim = bottomBoundary;
+float scoreMargin = 50;
+
 public void DrawHighscore(){
   background(155, 155, 155);
-
-  String s = "Highscore";
-  DrawText(32, width/2 - 100, 30, s);
-
-  s = loadHighscore();
-  DrawText(32, width/2 - 100, 130, s);
 
   mainMenuImage = loadImage("Resources/MenuButton.png");
   image(mainMenuImage, width/2 - mainMenuImage.width/2, 600);
   mainMenuButton = new ButtonRect(width/2 - mainMenuImage.width/2, width/2 + mainMenuImage.width/2, 600, 600+mainMenuImage.height);
+
+  String s = "Highscore";
+  DrawText(32, width/2 - 100, 30, s);
+
+  boolean drewAnything = false;
+  String[] sa = loadHighscore();
+  for(int i = 0; i < sa.length; i++){
+    if(topBoundary + i * scoreMargin + highscoreAnim > topBoundary+25 && i * scoreMargin + highscoreAnim < bottomBoundary){
+        drewAnything = true;
+        DrawText(32, width/2 - 100, topBoundary + i * scoreMargin + highscoreAnim, sa[i]);
+    }
+  }
+
+  line(0, topBoundary, width, topBoundary);
+  line(0, bottomBoundary+100, width, bottomBoundary+100);
+
+  if(highscoreAnim == -bottomBoundary-100)
+    highscoreAnim = bottomBoundary;
+  else
+    highscoreAnim--;
 }
 
 public void saveHighscore(){
@@ -586,14 +624,16 @@ public void saveHighscore(){
   saveStrings(dataPath("highscores.txt"), tmp);
 }
 
-public String loadHighscore(){
-  String[] highscores = loadStrings("data/highscores.txt");
+public String[] loadHighscore(){
+  // String[] highscores = loadStrings("data/highscores.txt");
+  //
+  // String s = "";
+  // for(String string : highscores){
+  //   s += string + "\n";
+  // }
+  // return s;
 
-  String s = "";
-  for(String string : highscores){
-    s += string + "\n";
-  }
-  return s;
+  return loadStrings("data/highscores.txt");
 }
 boolean moveLeft;
 boolean moveRight;
@@ -888,33 +928,64 @@ class Player extends GameObject{
     bullets.add(bullet);
   }
 }
-class PowerUp extends GameObject{
-  
+class PowerUp extends GameObject {
+  //ellipse (pos.x, pos.y, 20, 20);
+
+
   float PowerUpInc;
- // int numbers[];
- 
- public PowerUp(){
-   //numbers = new int[]
-//  super(pos, vel, a, colStroke, colFill, r, health);
-  pos = new PVector();
-  PowerUpInc = random(100);
-  //vel = new PVector();
-  colStroke = new PVector(20, 255, 20);
-  colFill = new PVector(20, 255, 20);
+  public int numbers[];
+  public int rand;
+  int scoreupdate;
+  int spawn = 0;
+  int time;
+  boolean trufalse = false;
+  float sizemod = 50;
+  
+
+  public PowerUp() {
+    numbers = new int [4];
+    numbers[0] = 10;
+    numbers[1] = 20;
+    numbers[2] = 30;
+    numbers[3] = 40;
+    pos = new PVector();
+    colStroke = new PVector(20, 255, 20);
+    colFill = new PVector(20, 255, 20);
     pos.x= random(width);
     pos.y= random(height);
-    //PowerUpInc = %10;
-  
+    RandNum();
   }
-  public void update (){
-if (score == PowerUpInc){
-  ellipse (pos.x, pos.y, 20, 20);
-}
+  public void RandNum() {
+    rand = (int)random(numbers.length);
+    scoreupdate = (int)score + numbers[rand];
+    println (scoreupdate);
+  }
+
+  public void update () {
+    if (score == scoreupdate) {
+      trufalse = true;
+      time = millis();
+    }
+    if (trufalse == true) {
+
+      ellips();
+    }
+  }
+  public void ellips() {
+
+    if (millis() < time + 3000) {
+      float test = 1f -  ((float)millis() - time)/3000;
+        r = test * sizemod;
+      fill(255);
+      ellipse (pos.x, pos.y, r, r);
+      // trufalse = false;
+    }
 
   }
-  
-  
-
+  public void activate(){
+  //test
+    print("Activated power up");
+  }
 }
 class Weapon{
   float damage;

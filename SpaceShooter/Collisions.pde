@@ -1,9 +1,17 @@
-public boolean BulletEnemyCollision(Bullet bullet, Enemy enemy){
-  // if(bullet.pos.x + bullet.r > enemy.pos.x && bullet.pos.x < enemy.pos.x + enemy.r && bullet.pos.y + bullet.r > enemy.pos.y && bullet.pos.y < enemy.pos.y + enemy.r){
-  //   return true;
-  // }
+public boolean BulletEnemyCollision(Bullet bullet, GameObject other){
 
-  return dist(bullet.pos.x, bullet.pos.y, enemy.pos.x, enemy.pos.y) < bullet.r + enemy.r;
+  if(dist(bullet.pos.x, bullet.pos.y, other.pos.x, other.pos.y) < bullet.r + other.r){
+    //print("Collision\n");
+    if(other instanceof PowerUp){
+      //print("With PowerUp\n");
+      ((PowerUp)other).activate();
+    }
+
+    return true;
+  }
+  else{
+    return false;
+  }
 }
 
 public boolean BulletPlayerCollision(GameObject bullet, Player player){

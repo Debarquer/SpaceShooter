@@ -50,10 +50,10 @@ class PowerUp extends GameObject {
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }
-    
+
   }
-  void activate(){
+  public void activate(){
   //test
-  
+    print("Activated power up");
   }
 }
