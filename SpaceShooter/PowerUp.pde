@@ -64,7 +64,11 @@ class PowerUp extends GameObject {
 
     puTimerCurr += (float)1/60;
     if(puTimerCurr >= puTimerMax){
-      time = millis();
+      if(!hasGeneratedGoal){
+        time = millis();
+        hasGeneratedGoal = true;
+      }
+
     }
 
     ellips();
@@ -77,10 +81,10 @@ class PowerUp extends GameObject {
 
   //draws the ellipse
   void ellips() {
-    //print(millis()+":"+(time+3000)+"\n");
+    print(millis()+":"+(time+3000)+"\n");
     if (millis() < time + 3000) {
       float test = 1f -  ((float)millis() - time)/3000;
-      print(test + "\n");
+      //print(test + "\n");
       r = test * sizemod;
       fill(colFill.x, colFill.y, colFill.z);
       ellipse (pos.x, pos.y, r, r);
