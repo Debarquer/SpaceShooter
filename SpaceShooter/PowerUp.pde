@@ -9,6 +9,8 @@ class PowerUp extends GameObject {
   int spawn = 0;
   int time;
   boolean trufalse = false;
+  float sizemod = 50;
+  
 
   public PowerUp() {
     numbers = new int [4];
@@ -42,8 +44,10 @@ class PowerUp extends GameObject {
   void ellips() {
 
     if (millis() < time + 3000) {
+      float test = 1f -  ((float)millis() - time)/3000;
+        r = test * sizemod;
       fill(255);
-      ellipse (pos.x, pos.y, 50, 50);
+      ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }
     
