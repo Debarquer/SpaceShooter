@@ -56,7 +56,7 @@ public void setup(){
   //damage, fireRate
   Weapon weapon = new Weapon(1, 0.3f);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-  powerup = new PU_FasterBullets();
+  powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -103,7 +103,7 @@ public void draw(){
     if(BGEPos < -BGEImage.width/2){
       BGEPos = 0;
     }
-   powerup.update();
+
     String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
     DrawText(32, 30, 30, s);
 
@@ -157,6 +157,9 @@ public void draw(){
               //get powered up
               bullets.get(i).enabled = false;
               powerup.enabled = false;
+              powerup.keepDrawing = true;
+              powerup.diableTimerCurr = 0;
+
             }
           }
         }
@@ -246,9 +249,9 @@ public void ResetGame(){
 
 public void SpawnEnemies(){
 
-  if (level % 3 == 0){
-    powerup.RandNum();
-  }
+  // if (level % 3 == 0){
+  //   powerup.RandNum();
+  // }
   for(int i = 0; i < 6; i++){
     float r = 30;
     float x = width + (i * (r + 50));
@@ -534,6 +537,19 @@ class FastWeapon extends Weapon{
 
     this.damage = damage;
     this.fireRate = fireRate;
+  }
+
+  public void Shoot(){
+    float rBullet = 5;
+    PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
+    PVector velBullet = new PVector(10, 10, 10);
+    PVector aBullet = new PVector(0, 0, 0);
+    PVector colStrokeBullet = new PVector(0, 0, 0);
+    PVector colFillBullet = new PVector(0, 255, 0);
+    float healthBullet = 1;
+
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    bullets.add(bullet);
   }
 }
 abstract class GameObject{
@@ -878,24 +894,46 @@ public void DrawMainMenu(){
   exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
 }
 class PU_FasterBullets extends PowerUp{
+  public void spray(){
+    player.weapon.fireRate = 0.03f;
+  }
+  public void activate() {
+    super.activate();
 
-public void spray(){
+    spray();
+  }
+  public void deactivate(){
+    player.weapon.fireRate = 0.3f;
+  }
+}
+class PU_MoveFaster extends PowerUp{
 
-player.weapon.fireRate = 0.0009f;
+  float oldSpeed;
+  float newSpeed;
+  public PU_MoveFaster(){
+    super();
+    oldSpeed = player.vel.y;
+    newSpeed = player.vel.y * 2;
+  }
 
+public void activate(){
+super.activate();
 
-
+player.weapon.fireRate = 0.03f;
+player.vel.y = newSpeed;
 
 }
-public void activate() {
-spray();
 
+public void deactivate(){
+  super.deactivate();
+  player.weapon.fireRate = 0.3f;
+  player.vel.y = oldSpeed;
 }
 
-
-
+public void Message(){
+  DrawText(32, width/2, height/2, "You Move Faster");
 }
-
+}
 class PU_RandomWeapon extends PowerUp{
 
   public PU_RandomWeapon(){
@@ -905,20 +943,20 @@ class PU_RandomWeapon extends PowerUp{
   }
 
   public void activate(){
-
+    super.activate();
     //print("Enjoy your new weapon \n");
     player.weapon = new FastWeapon(1, 0.01f);
-    player.receivePowerup();
 
-    player.weapon.fireRate = 0.01f;
+    //player.weapon.fireRate = 0.01;
   }
 
   public void deactivate(){
   //test
+  super.deactivate();
     //print("Deactivated power up");
 
     //player.weapon = new Weapon();
-    player.weapon.fireRate = 0.3f;
+    //player.weapon.fireRate = 0.3;
     //RandNum();
   }
 }
@@ -933,6 +971,8 @@ class Player extends GameObject{
 
   float powerupTimerMax = 3;
   float powerupTimerCurr;
+
+  boolean hasPowerup = false;
 
   public Player(){
     super();
@@ -960,11 +1000,23 @@ class Player extends GameObject{
       }
     }
 
-    print("Timer: " + powerupTimerCurr + "\n");
+    powerup.keepDrawing();
+
+    //print("Timer: " + powerupTimerCurr + "\n");
     powerupTimerCurr+=(float)1/60;
     if(powerupTimerCurr >= powerupTimerMax){
-      powerupTimerCurr = 0;
-      powerup.deactivate();
+      //powerupTimerCurr = 0;
+
+      if(hasPowerup){
+        powerup.deactivate();
+        hasPowerup = false;
+        powerup.hasGeneratedGoal = false;
+      }
+
+      powerup.update();
+    }
+    else{
+
     }
 
     if(pos.y > height){
@@ -980,6 +1032,7 @@ class Player extends GameObject{
   }
 
   public void receivePowerup(){
+    hasPowerup = true;
     powerupTimerCurr = 0;
   }
 
@@ -1022,12 +1075,23 @@ class PowerUp extends GameObject {
   boolean trufalse = false;
   float sizemod = 50;
 
+  boolean hasGeneratedGoal = false;
+
+  float puTimerMax = 5;
+  float puTimerCurr;
+  float messageTimerMax = 1;
+  float messageTimerCurr = messageTimerMax + 1;
+
+  boolean keepDrawing = false;
+  float disableTimerMax = 1.5f;
+  float diableTimerCurr = 0;
+
   public PowerUp() {
     numbers = new int [4];
-    numbers[0] = 10;
-    numbers[1] = 20;
-    numbers[2] = 30;
-    numbers[3] = 40;
+    numbers[0] = 3;
+    numbers[1] = 5;
+    numbers[2] = 8;
+    numbers[3] = 10;
     pos = new PVector();
     colStroke = new PVector(20, 255, 20);
     colFill = new PVector(20, 255, 20);
@@ -1036,52 +1100,81 @@ class PowerUp extends GameObject {
     RandNum();
   }
   public void RandNum() {
-    rand = (int)random(numbers.length);
-    scoreupdate = (int)score + numbers[rand];
-    println (scoreupdate);
+    // if(puTimerCurr >= puTimerMax){
+    //   rand = (int)random(numbers.length);
+    //   scoreupdate = (int)score + numbers[rand];
+    //   println (scoreupdate);
+    //
+    //   hasGeneratedGoal = true;
+    // }
+  }
+
+  public void keepDrawing(){
+    //print(keepDrawing + ":" + diableTimerCurr + "\n");
+    if(keepDrawing){
+      diableTimerCurr += (float)1/60;
+      if(diableTimerCurr < disableTimerMax){
+        ellipse (pos.x, pos.y, r, r);
+        powerup.Message();
+      }
+      else{
+        keepDrawing = false;
+        diableTimerCurr = 0;
+      }
+    }
   }
 
   public void update () {
-    if(enabled){
-      if (trufalse == true) {
+    RandNum();
 
-        ellips();
-      }
-    }
-    if (score == scoreupdate) {
-      enabled = true;
-      trufalse = true;
+    puTimerCurr += (float)1/60;
+    if(puTimerCurr >= puTimerMax){
       time = millis();
     }
-  }
-  public void ellips() {
 
+    ellips();
+
+    messageTimerCurr += (float)1/60;
+    if(messageTimerCurr < messageTimerMax){
+      enabled = true;
+    }
+  }
+
+  //draws the ellipse
+  public void ellips() {
+    //print(millis()+":"+(time+3000)+"\n");
     if (millis() < time + 3000) {
       float test = 1f -  ((float)millis() - time)/3000;
-        r = test * sizemod;
+      print(test + "\n");
+      r = test * sizemod;
       fill(colFill.x, colFill.y, colFill.z);
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }
-    else{
-      enabled = false;
-    }
-
   }
   public void activate(){
   //test
-    //print("Activated power up");
+    print("Base activate function\n");
 
+    messageTimerCurr = 0;
     player.receivePowerup();
-
-    RandNum();
   }
 
   public void deactivate(){
   //test
-    print("Activated power up");
+    print("Base deactivate function\n");
+    //time = millis();
+    hasGeneratedGoal = false;
+    puTimerCurr = 0;
+    rand = (int)random(numbers.length);
+    puTimerMax = numbers[rand];
+    println (puTimerMax + "\n");
+    pos.x= random(width);
+    pos.y= random(height);
+  }
 
-    RandNum();
+  public void Message(){
+
   }
 }
 class Weapon{

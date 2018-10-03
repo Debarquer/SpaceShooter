@@ -10,6 +10,8 @@ class Player extends GameObject{
   float powerupTimerMax = 3;
   float powerupTimerCurr;
 
+  boolean hasPowerup = false;
+
   public Player(){
     super();
   }
@@ -36,14 +38,31 @@ class Player extends GameObject{
       }
     }
 
-    print("Timer: " + powerupTimerCurr + "\n");
+    powerup.keepDrawing();
+
+    //print("Timer: " + powerupTimerCurr + "\n");
     powerupTimerCurr+=(float)1/60;
     if(powerupTimerCurr >= powerupTimerMax){
+<<<<<<< HEAD
       powerupTimerCurr = 0;
       powerup.deactivate();
        
     }{
      
+=======
+      //powerupTimerCurr = 0;
+
+      if(hasPowerup){
+        powerup.deactivate();
+        hasPowerup = false;
+        powerup.hasGeneratedGoal = false;
+      }
+
+      powerup.update();
+    }
+    else{
+
+>>>>>>> 13ec5d83bb29c34df7426627be5d4e3cc701895f
     }
 
     if(pos.y > height){
@@ -59,6 +78,7 @@ class Player extends GameObject{
   }
 
   void receivePowerup(){
+    hasPowerup = true;
     powerupTimerCurr = 0;
   }
 

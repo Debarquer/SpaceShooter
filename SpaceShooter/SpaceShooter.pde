@@ -40,7 +40,7 @@ void setup(){
   //damage, fireRate
   Weapon weapon = new Weapon(1, 0.3);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-  powerup = new PU_MoveFaster();
+  powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -87,7 +87,7 @@ void draw(){
     if(BGEPos < -BGEImage.width/2){
       BGEPos = 0;
     }
-   powerup.update();
+
     String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
     DrawText(32, 30, 30, s);
 
@@ -141,6 +141,9 @@ void draw(){
               //get powered up
               bullets.get(i).enabled = false;
               powerup.enabled = false;
+              powerup.keepDrawing = true;
+              powerup.diableTimerCurr = 0;
+
             }
           }
         }
@@ -230,9 +233,9 @@ void ResetGame(){
 
 void SpawnEnemies(){
 
-  if (level % 3 == 0){
-    powerup.RandNum();
-  }
+  // if (level % 3 == 0){
+  //   powerup.RandNum();
+  // }
   for(int i = 0; i < 6; i++){
     float r = 30;
     float x = width + (i * (r + 50));
