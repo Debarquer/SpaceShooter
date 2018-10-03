@@ -7,6 +7,9 @@ class Player extends GameObject{
 
   Weapon weapon;
 
+  float powerupTimerMax = 3;
+  float powerupTimerCurr;
+
   public Player(){
     super();
   }
@@ -26,10 +29,18 @@ class Player extends GameObject{
     if(!canFire){
       //print(shootTimerCurr + "\n");
       shootTimerCurr += (float)1/60;
+
       if(shootTimerCurr >= weapon.fireRate){
         shootTimerCurr = 0;
         canFire = true;
       }
+    }
+
+    print("Timer: " + powerupTimerCurr + "\n");
+    powerupTimerCurr+=(float)1/60;
+    if(powerupTimerCurr >= powerupTimerMax){
+      powerupTimerCurr = 0;
+      powerup.deactivate();
     }
 
     if(pos.y > height){
@@ -42,6 +53,10 @@ class Player extends GameObject{
     fill(colFill.x, colFill.y, colFill.z);
     stroke(colStroke.x,colStroke.y, colStroke.z);
     rect(pos.x, pos.y, size.x, size.y);
+  }
+
+  void receivePowerup(){
+    powerupTimerCurr = 0;
   }
 
   public void Move(){
@@ -60,14 +75,14 @@ class Player extends GameObject{
 
   void Shoot(){
     float rBullet = 5;
-    PVector posBullet = new PVector(pos.x + size.x, pos.y + size.y/2 - r/2, pos.z);
+    PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
     PVector velBullet = new PVector(10, 10, 10);
     PVector aBullet = new PVector(0, 0, 0);
     PVector colStrokeBullet = new PVector(0, 0, 0);
     PVector colFillBullet = new PVector(0, 255, 0);
     float healthBullet = 1;
 
-    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, weapon.damage);
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
     bullets.add(bullet);
   }
 }

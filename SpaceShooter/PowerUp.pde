@@ -58,6 +58,15 @@ class PowerUp extends GameObject {
   }
   public void activate(){
   //test
+    //print("Activated power up");
+
+    player.receivePowerup();
+
+    RandNum();
+  }
+
+  public void deactivate(){
+  //test
     print("Activated power up");
 
     RandNum();
