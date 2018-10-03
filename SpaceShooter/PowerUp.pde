@@ -9,7 +9,7 @@ class PowerUp extends GameObject {
   int spawn = 0;
   int time;
   boolean trufalse = false;
-  
+
   public PowerUp() {
     numbers = new int [4];
     numbers[0] = 10;
@@ -23,9 +23,9 @@ class PowerUp extends GameObject {
     pos.y= random(height);
     RandNum();
   }
- void RandNum() {
+  void RandNum() {
     rand = (int)random(numbers.length);
-      scoreupdate = (int)score + numbers[rand];
+    scoreupdate = (int)score + numbers[rand];
     println (scoreupdate);
   }
 
@@ -33,10 +33,10 @@ class PowerUp extends GameObject {
     if (score == scoreupdate) {
       trufalse = true;
       time = millis();
-      }
-    if (trufalse == true){
+    }
+    if (trufalse == true) {
 
-        ellips();
+      ellips();
     }
   }
   void ellips() {
@@ -44,7 +44,12 @@ class PowerUp extends GameObject {
     if (millis() < time + 3000) {
       fill(255);
       ellipse (pos.x, pos.y, 50, 50);
-     // trufalse = false;
+      // trufalse = false;
     }
+    
+  }
+  void activate(){
+  //test
+  
   }
 }
