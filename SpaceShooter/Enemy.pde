@@ -41,7 +41,7 @@ class Enemy extends GameObject{
     this.colFill.z = 0;
 
     this.r = r;
-    this.currHealth = this.health = baseHealth + level;
+    this.currHealth = this.health = baseHealth /*+ level*/;
 
     enabled = true;
 

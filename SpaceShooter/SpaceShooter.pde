@@ -5,6 +5,7 @@ ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
 PowerUp powerup;
+
 Stars stars;
 
 float maxHealth = 10;
@@ -38,12 +39,12 @@ void setup(){
 
   Weapon weapon = new Weapon(1, 0.3);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-
+  powerup = new PowerUp();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
   bullets = new ArrayList<Bullet>();
-  powerup = new PowerUp();
+
 
   stars = new Stars();
 
@@ -56,6 +57,8 @@ void setup(){
 
 void draw(){
   //print(gameState + "\n");
+ 
+
   if(gameState == GameState.Playing){
     background(0, 0, 55);
     //stars.UpdateStars();
@@ -85,7 +88,7 @@ void draw(){
     if(BGEPos < -BGEImage.width/2){
       BGEPos = 0;
     }
-
+   powerup.update();
     String s = "Health: "+(int)health + " Score: "+(int)score + " Level: " + (int)level;
     DrawText(32, 30, 30, s);
 
@@ -93,7 +96,7 @@ void draw(){
       level++;
       SpawnEnemies();
     }
-    powerup.update();
+
     player.Move();
     player.Update();
 
@@ -220,6 +223,10 @@ void ResetGame(){
 }
 
 void SpawnEnemies(){
+  
+  if (level % 3 == 0){
+ powerup.RandNum();
+  }
   for(int i = 0; i < 6; i++){
     float r = 30;
     float x = width + (i * (r + 50));
