@@ -46,7 +46,6 @@ void setup(){
 
   bullets = new ArrayList<Bullet>();
 
-
   stars = new Stars();
 
   BGAImage = loadImage("Resources/BGA.png");
@@ -58,7 +57,6 @@ void setup(){
 
 void draw(){
   //print(gameState + "\n");
-
 
   if(gameState == GameState.Playing){
     background(0, 0, 55);
