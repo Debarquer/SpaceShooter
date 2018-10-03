@@ -11,13 +11,13 @@ class FastWeapon extends Weapon{
 
   public FastWeapon(float damage, float fireRate){
 
-    print("Instantiated new fast weapon\n");
+    super(damage, fireRate);
 
-    this.damage = damage;
-    this.fireRate = fireRate;
+    print("Instantiated new fast weapon\n");
   }
 
   public void Shoot(){
+    print("Shooting fast\n");
     float rBullet = 5;
     PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
     PVector velBullet = new PVector(10, 10, 10);
@@ -27,6 +27,12 @@ class FastWeapon extends Weapon{
     float healthBullet = 1;
 
     Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    bullets.add(bullet);
+    posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2 - 40, player.pos.z);
+    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    bullets.add(bullet);
+    posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2 + 40, player.pos.z);
+    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
     bullets.add(bullet);
   }
 }

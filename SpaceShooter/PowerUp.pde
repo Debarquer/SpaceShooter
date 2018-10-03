@@ -111,6 +111,4 @@ class PowerUp extends GameObject {
   public void Message(){
 
   }
-  public void Message(){
-  }
 }

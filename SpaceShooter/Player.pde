@@ -43,13 +43,6 @@ class Player extends GameObject{
     //print("Timer: " + powerupTimerCurr + "\n");
     powerupTimerCurr+=(float)1/60;
     if(powerupTimerCurr >= powerupTimerMax){
-<<<<<<< HEAD
-      powerupTimerCurr = 0;
-      powerup.deactivate();
-       
-    }{
-     
-=======
       //powerupTimerCurr = 0;
 
       if(hasPowerup){
@@ -61,8 +54,6 @@ class Player extends GameObject{
       powerup.update();
     }
     else{
-
->>>>>>> 13ec5d83bb29c34df7426627be5d4e3cc701895f
     }
 
     if(pos.y > height){
@@ -97,15 +88,6 @@ class Player extends GameObject{
   }
 
   void Shoot(){
-    float rBullet = 5;
-    PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
-    PVector velBullet = new PVector(10, 10, 10);
-    PVector aBullet = new PVector(0, 0, 0);
-    PVector colStrokeBullet = new PVector(0, 0, 0);
-    PVector colFillBullet = new PVector(0, 255, 0);
-    float healthBullet = 1;
-
-    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
-    bullets.add(bullet);
+    weapon.Shoot();
   }
 }

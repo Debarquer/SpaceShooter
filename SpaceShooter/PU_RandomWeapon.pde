@@ -19,7 +19,7 @@ class PU_RandomWeapon extends PowerUp{
   super.deactivate();
     //print("Deactivated power up");
 
-    //player.weapon = new Weapon();
+  player.weapon = new Weapon();
     //player.weapon.fireRate = 0.3;
     //RandNum();
   }

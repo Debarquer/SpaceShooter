@@ -533,13 +533,13 @@ class FastWeapon extends Weapon{
 
   public FastWeapon(float damage, float fireRate){
 
-    print("Instantiated new fast weapon\n");
+    super(damage, fireRate);
 
-    this.damage = damage;
-    this.fireRate = fireRate;
+    print("Instantiated new fast weapon\n");
   }
 
   public void Shoot(){
+    print("Shooting fast\n");
     float rBullet = 5;
     PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
     PVector velBullet = new PVector(10, 10, 10);
@@ -549,6 +549,12 @@ class FastWeapon extends Weapon{
     float healthBullet = 1;
 
     Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    bullets.add(bullet);
+    posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2 - 40, player.pos.z);
+    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    bullets.add(bullet);
+    posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2 + 40, player.pos.z);
+    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
     bullets.add(bullet);
   }
 }
@@ -955,7 +961,7 @@ class PU_RandomWeapon extends PowerUp{
   super.deactivate();
     //print("Deactivated power up");
 
-    //player.weapon = new Weapon();
+  player.weapon = new Weapon();
     //player.weapon.fireRate = 0.3;
     //RandNum();
   }
@@ -1016,7 +1022,6 @@ class Player extends GameObject{
       powerup.update();
     }
     else{
-
     }
 
     if(pos.y > height){
@@ -1051,16 +1056,7 @@ class Player extends GameObject{
   }
 
   public void Shoot(){
-    float rBullet = 5;
-    PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
-    PVector velBullet = new PVector(10, 10, 10);
-    PVector aBullet = new PVector(0, 0, 0);
-    PVector colStrokeBullet = new PVector(0, 0, 0);
-    PVector colFillBullet = new PVector(0, 255, 0);
-    float healthBullet = 1;
-
-    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
-    bullets.add(bullet);
+    weapon.Shoot();
   }
 }
 class PowerUp extends GameObject {
