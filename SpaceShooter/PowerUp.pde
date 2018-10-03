@@ -45,7 +45,7 @@ class PowerUp extends GameObject {
   }
 
   void keepDrawing(){
-    print(keepDrawing + ":" + diableTimerCurr + "\n");
+    //print(keepDrawing + ":" + diableTimerCurr + "\n");
     if(keepDrawing){
       diableTimerCurr += (float)1/60;
       if(diableTimerCurr < disableTimerMax){
@@ -80,7 +80,8 @@ class PowerUp extends GameObject {
     //print(millis()+":"+(time+3000)+"\n");
     if (millis() < time + 3000) {
       float test = 1f -  ((float)millis() - time)/3000;
-        r = test * sizemod;
+      print(test + "\n");
+      r = test * sizemod;
       fill(colFill.x, colFill.y, colFill.z);
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
@@ -103,6 +104,8 @@ class PowerUp extends GameObject {
     rand = (int)random(numbers.length);
     puTimerMax = numbers[rand];
     println (puTimerMax + "\n");
+    pos.x= random(width);
+    pos.y= random(height);
   }
 
   public void Message(){

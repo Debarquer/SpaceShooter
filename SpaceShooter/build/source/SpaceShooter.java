@@ -56,7 +56,7 @@ public void setup(){
   //damage, fireRate
   Weapon weapon = new Weapon(1, 0.3f);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-  powerup = new PU_MoveFaster();
+  powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -894,33 +894,17 @@ public void DrawMainMenu(){
   exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
 }
 class PU_FasterBullets extends PowerUp{
+  public void spray(){
+    player.weapon.fireRate = 0.03f;
+  }
+  public void activate() {
+    super.activate();
 
-public void spray(){
-
-
-player.weapon.fireRate = 0.03f;
-
-
-
-
-}
-public void activate() {
-  super.activate();
-
-  spray();
-
-}
-public void deactivate(){
-
-player.weapon.fireRate = 0.3f;
-
-
-
-}
-
-
-
-
+    spray();
+  }
+  public void deactivate(){
+    player.weapon.fireRate = 0.3f;
+  }
 }
 class PU_MoveFaster extends PowerUp{
 
@@ -941,15 +925,13 @@ player.vel.y = newSpeed;
 }
 
 public void deactivate(){
-  super.deactivate(); 
+  super.deactivate();
   player.weapon.fireRate = 0.3f;
   player.vel.y = oldSpeed;
 }
 
 public void Message(){
-
-DrawText(32, width/2, height/2, "You Move Faster");
-
+  DrawText(32, width/2, height/2, "You Move Faster");
 }
 }
 class PU_RandomWeapon extends PowerUp{
@@ -965,15 +947,16 @@ class PU_RandomWeapon extends PowerUp{
     //print("Enjoy your new weapon \n");
     player.weapon = new FastWeapon(1, 0.01f);
 
-    player.weapon.fireRate = 0.01f;
+    //player.weapon.fireRate = 0.01;
   }
 
   public void deactivate(){
   //test
+  super.deactivate();
     //print("Deactivated power up");
 
     //player.weapon = new Weapon();
-    player.weapon.fireRate = 0.3f;
+    //player.weapon.fireRate = 0.3;
     //RandNum();
   }
 }
@@ -1127,7 +1110,7 @@ class PowerUp extends GameObject {
   }
 
   public void keepDrawing(){
-    print(keepDrawing + ":" + diableTimerCurr + "\n");
+    //print(keepDrawing + ":" + diableTimerCurr + "\n");
     if(keepDrawing){
       diableTimerCurr += (float)1/60;
       if(diableTimerCurr < disableTimerMax){
@@ -1162,7 +1145,8 @@ class PowerUp extends GameObject {
     //print(millis()+":"+(time+3000)+"\n");
     if (millis() < time + 3000) {
       float test = 1f -  ((float)millis() - time)/3000;
-        r = test * sizemod;
+      print(test + "\n");
+      r = test * sizemod;
       fill(colFill.x, colFill.y, colFill.z);
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
@@ -1185,6 +1169,8 @@ class PowerUp extends GameObject {
     rand = (int)random(numbers.length);
     puTimerMax = numbers[rand];
     println (puTimerMax + "\n");
+    pos.x= random(width);
+    pos.y= random(height);
   }
 
   public void Message(){

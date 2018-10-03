@@ -17,14 +17,12 @@ player.vel.y = newSpeed;
 }
 
 public void deactivate(){
-  super.deactivate(); 
+  super.deactivate();
   player.weapon.fireRate = 0.3;
   player.vel.y = oldSpeed;
 }
 
 void Message(){
-
-DrawText(32, width/2, height/2, "You Move Faster");
-
+  DrawText(32, width/2, height/2, "You Move Faster");
 }
 }

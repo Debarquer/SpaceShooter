@@ -40,7 +40,7 @@ void setup(){
   //damage, fireRate
   Weapon weapon = new Weapon(1, 0.3);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-  powerup = new PU_MoveFaster();
+  powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
