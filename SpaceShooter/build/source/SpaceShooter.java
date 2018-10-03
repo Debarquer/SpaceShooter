@@ -16,10 +16,12 @@ public class SpaceShooter extends PApplet {
 
 enum GameState {MainMenu, Highscore, Paused, Playing, GameOver};
 GameState gameState = GameState.MainMenu;
+boolean multiplaying = true;
 
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
+Player player2;
 PowerUp powerup;
 
 Stars stars;
@@ -46,18 +48,33 @@ ArrayList<PowerUp> powerUps;
 public void setup(){
   
 
-  PVector pos = new PVector(10, 100, 0);
-  PVector vel = new PVector(7, 7, 7);
-  PVector a = new PVector(0, 0, 0);
-  PVector colStroke = new PVector(random(255), random(255), random(255));
-  PVector colFill = new PVector(random(255), random(255), random(255));
-  float r = 15;
-  float health = 10;
-  PVector size = new PVector(20, 15);
+  PVector pos1 = new PVector(10, 100, 0);
+  PVector vel1 = new PVector(7, 7, 7);
+  PVector a1 = new PVector(0, 0, 0);
+  PVector colStroke1 = new PVector(random(255), random(255), random(255));
+  PVector colFill1 = new PVector(random(255), random(255), random(255));
+  float r1 = 15;
+  float health1 = 10;
+  PVector size1 = new PVector(20, 15);
+  Weapon weapon1 = new Weapon(1, 0.3f);
 
-  //damage, fireRate
-  Weapon weapon = new Weapon(1, 0.3f);
-  player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
+  player = new Player(pos1, vel1, a1, colStroke1, colFill1, r1, health1, size1, weapon1);
+
+  if(multiplaying){
+    PVector pos2 = new PVector(10, height-100, 0);
+    PVector vel2 = new PVector(7, 7, 7);
+    PVector a2 = new PVector(0, 0, 0);
+    PVector colStroke2 = new PVector(random(255), random(255), random(255));
+    PVector colFill2 = new PVector(random(255), random(255), random(255));
+    float r2 = 15;
+    float health2 = 10;
+    PVector size2 = new PVector(20, 15);
+    Weapon weapon2 = new Weapon(1, 0.3f);
+    
+    player2 = new Player(pos2, vel2, a2, colStroke2, colFill2, r2, health2, size2, weapon2);
+  }
+
+
   powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
@@ -121,6 +138,10 @@ public void draw(){
 
     player.Move();
     player.Update();
+    if(multiplaying){
+      player2.Move();
+      player2.Update();
+    }
 
     for(int i = 0; i < enemies.size(); i++){
       if(enemies.get(i).enabled){
@@ -134,6 +155,18 @@ public void draw(){
             print("YOU LOSE!\n");
 
             gameState = GameState.GameOver;
+          }
+        }
+        if(multiplaying){
+          if(BulletPlayerCollision(enemies.get(i), player2)){
+            enemies.get(i).enabled = false;
+            health--;
+            if(health <= 0){
+              health = 0;
+              print("YOU LOSE!\n");
+
+              gameState = GameState.GameOver;
+            }
           }
         }
 
@@ -182,6 +215,18 @@ public void draw(){
               gameState = GameState.GameOver;
             }
           }
+          if(multiplaying){
+            if(BulletPlayerCollision(bullets.get(i), player2)){
+              bullets.get(i).enabled = false;
+              health--;
+              if(health <= 0){
+                health = 0;
+                print("YOU LOSE!\n");
+
+                gameState = GameState.GameOver;
+              }
+            }
+          }
         }
 
         bullets.get(i).Update();
@@ -195,6 +240,13 @@ public void draw(){
       player.canFire = false;
 
       player.Shoot();
+    }
+    if(multiplaying){
+      if(space && player2.canFire){
+        player2.canFire = false;
+
+        player2.Shoot();
+      }
     }
 
     if(pressedEscape && releasedEscape){
@@ -854,6 +906,11 @@ public void mouseReleased(){
 	if(gameState == GameState.MainMenu){
 		if(playButton.Clicked(mouseX, mouseY)){
 	    gameState = GameState.Playing;
+			multiplaying = false;
+	  }
+		else if(multiplayButton.Clicked(mouseX, mouseY)){
+			multiplaying = true;
+	    gameState = GameState.Playing;
 	  }
 	  else if(highscoreButton.Clicked(mouseX, mouseY)){
 	    gameState = GameState.Highscore;
@@ -884,10 +941,12 @@ class ButtonRect{
 }
 
 PImage playImage;
+PImage multiplayImage;
 PImage highscoreImage;
 PImage exitImage;
 
 ButtonRect playButton;
+ButtonRect multiplayButton;
 ButtonRect highscoreButton;
 ButtonRect exitButton;
 
@@ -898,16 +957,20 @@ public void DrawMainMenu(){
   DrawText(32, width/2 - 100, 30, s);
 
   playImage = loadImage("Resources/PlayButton.png");
-  image(playImage, width/2 - playImage.width/2, 200);
-  playButton = new ButtonRect(width/2 - playImage.width/2, width/2 + playImage.width/2, 200, 200+playImage.height);
+  image(playImage, width/2 - playImage.width/2, 150);
+  playButton = new ButtonRect(width/2 - playImage.width/2, width/2 + playImage.width/2, 150, 150+playImage.height);
+
+  multiplayImage = loadImage("Resources/ButtonMultiplay.png");
+  image(multiplayImage, width/2 - multiplayImage.width/2, 350);
+  multiplayButton = new ButtonRect(width/2 - multiplayImage.width/2, width/2 + multiplayImage.width/2, 350, 350+multiplayImage.height);
 
   highscoreImage = loadImage("Resources/HighscoreButton.png");
-  image(highscoreImage, width/2 - highscoreImage.width/2, 400);
-  highscoreButton = new ButtonRect(width/2 - highscoreImage.width/2, width/2 + highscoreImage.width/2, 400, 400+highscoreImage.height);
+  image(highscoreImage, width/2 - highscoreImage.width/2, 550);
+  highscoreButton = new ButtonRect(width/2 - highscoreImage.width/2, width/2 + highscoreImage.width/2, 550, 550+highscoreImage.height);
 
   exitImage = loadImage("Resources/ExitButton.png");
-  image(exitImage, width/2 - exitImage.width/2, 600);
-  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
+  image(exitImage, width/2 - exitImage.width/2, 750);
+  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 750, 750+exitImage.height);
 }
 class PU_FasterBullets extends PowerUp{
   public void spray(){
@@ -1086,7 +1149,7 @@ class Player extends GameObject{
   }
 
   public void Shoot(){
-    weapon.Shoot();
+    weapon.Shoot(this);
   }
 }
 class PowerUp extends GameObject {
@@ -1223,16 +1286,16 @@ class Weapon{
     this.fireRate = fireRate;
   }
 
-  public void Shoot(){
+  public void Shoot(Player p){
     float rBullet = 5;
-    PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
+    PVector posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2, p.pos.z);
     PVector velBullet = new PVector(10, 10, 10);
     PVector aBullet = new PVector(0, 0, 0);
     PVector colStrokeBullet = new PVector(0, 0, 0);
     PVector colFillBullet = new PVector(0, 255, 0);
     float healthBullet = 1;
 
-    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
     bullets.add(bullet);
   }
 }

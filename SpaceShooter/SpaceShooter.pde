@@ -1,9 +1,11 @@
 enum GameState {MainMenu, Highscore, Paused, Playing, GameOver};
 GameState gameState = GameState.MainMenu;
+boolean multiplaying = true;
 
 ArrayList<Enemy> enemies;
 ArrayList<Bullet> bullets;
 Player player;
+Player player2;
 PowerUp powerup;
 
 Stars stars;
@@ -30,18 +32,33 @@ ArrayList<PowerUp> powerUps;
 void setup(){
   size(1400, 900);
 
-  PVector pos = new PVector(10, 100, 0);
-  PVector vel = new PVector(7, 7, 7);
-  PVector a = new PVector(0, 0, 0);
-  PVector colStroke = new PVector(random(255), random(255), random(255));
-  PVector colFill = new PVector(random(255), random(255), random(255));
-  float r = 15;
-  float health = 10;
-  PVector size = new PVector(20, 15);
+  PVector pos1 = new PVector(10, 100, 0);
+  PVector vel1 = new PVector(7, 7, 7);
+  PVector a1 = new PVector(0, 0, 0);
+  PVector colStroke1 = new PVector(random(255), random(255), random(255));
+  PVector colFill1 = new PVector(random(255), random(255), random(255));
+  float r1 = 15;
+  float health1 = 10;
+  PVector size1 = new PVector(20, 15);
+  Weapon weapon1 = new Weapon(1, 0.3);
 
-  //damage, fireRate
-  Weapon weapon = new Weapon(1, 0.3);
-  player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
+  player = new Player(pos1, vel1, a1, colStroke1, colFill1, r1, health1, size1, weapon1);
+
+  if(multiplaying){
+    PVector pos2 = new PVector(10, height-100, 0);
+    PVector vel2 = new PVector(7, 7, 7);
+    PVector a2 = new PVector(0, 0, 0);
+    PVector colStroke2 = new PVector(random(255), random(255), random(255));
+    PVector colFill2 = new PVector(random(255), random(255), random(255));
+    float r2 = 15;
+    float health2 = 10;
+    PVector size2 = new PVector(20, 15);
+    Weapon weapon2 = new Weapon(1, 0.3);
+    
+    player2 = new Player(pos2, vel2, a2, colStroke2, colFill2, r2, health2, size2, weapon2);
+  }
+
+
   powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
@@ -105,6 +122,10 @@ void draw(){
 
     player.Move();
     player.Update();
+    if(multiplaying){
+      player2.Move();
+      player2.Update();
+    }
 
     for(int i = 0; i < enemies.size(); i++){
       if(enemies.get(i).enabled){
@@ -118,6 +139,18 @@ void draw(){
             print("YOU LOSE!\n");
 
             gameState = GameState.GameOver;
+          }
+        }
+        if(multiplaying){
+          if(BulletPlayerCollision(enemies.get(i), player2)){
+            enemies.get(i).enabled = false;
+            health--;
+            if(health <= 0){
+              health = 0;
+              print("YOU LOSE!\n");
+
+              gameState = GameState.GameOver;
+            }
           }
         }
 
@@ -166,6 +199,18 @@ void draw(){
               gameState = GameState.GameOver;
             }
           }
+          if(multiplaying){
+            if(BulletPlayerCollision(bullets.get(i), player2)){
+              bullets.get(i).enabled = false;
+              health--;
+              if(health <= 0){
+                health = 0;
+                print("YOU LOSE!\n");
+
+                gameState = GameState.GameOver;
+              }
+            }
+          }
         }
 
         bullets.get(i).Update();
@@ -179,6 +224,13 @@ void draw(){
       player.canFire = false;
 
       player.Shoot();
+    }
+    if(multiplaying){
+      if(space && player2.canFire){
+        player2.canFire = false;
+
+        player2.Shoot();
+      }
     }
 
     if(pressedEscape && releasedEscape){

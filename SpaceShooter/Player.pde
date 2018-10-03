@@ -91,6 +91,6 @@ class Player extends GameObject{
   }
 
   void Shoot(){
-    weapon.Shoot();
+    weapon.Shoot(this);
   }
 }

@@ -14,6 +14,7 @@ class ButtonRect{
 }
 
 PImage playImage;
+PImage multiplayImage;
 PImage highscoreImage;
 PImage exitImage;
 
@@ -29,14 +30,18 @@ void DrawMainMenu(){
   DrawText(32, width/2 - 100, 30, s);
 
   playImage = loadImage("Resources/PlayButton.png");
-  image(playImage, width/2 - playImage.width/2, 200);
-  playButton = new ButtonRect(width/2 - playImage.width/2, width/2 + playImage.width/2, 200, 200+playImage.height);
+  image(playImage, width/2 - playImage.width/2, 150);
+  playButton = new ButtonRect(width/2 - playImage.width/2, width/2 + playImage.width/2, 150, 150+playImage.height);
+
+  multiplayImage = loadImage("Resources/ButtonMultiplay.png");
+  image(multiplayImage, width/2 - multiplayImage.width/2, 350);
+  multiplayButton = new ButtonRect(width/2 - multiplayImage.width/2, width/2 + multiplayImage.width/2, 350, 350+multiplayImage.height);
 
   highscoreImage = loadImage("Resources/HighscoreButton.png");
-  image(highscoreImage, width/2 - highscoreImage.width/2, 400);
-  highscoreButton = new ButtonRect(width/2 - highscoreImage.width/2, width/2 + highscoreImage.width/2, 400, 400+highscoreImage.height);
+  image(highscoreImage, width/2 - highscoreImage.width/2, 550);
+  highscoreButton = new ButtonRect(width/2 - highscoreImage.width/2, width/2 + highscoreImage.width/2, 550, 550+highscoreImage.height);
 
   exitImage = loadImage("Resources/ExitButton.png");
-  image(exitImage, width/2 - exitImage.width/2, 600);
-  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
+  image(exitImage, width/2 - exitImage.width/2, 750);
+  exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 750, 750+exitImage.height);
 }

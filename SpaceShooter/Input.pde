@@ -163,6 +163,11 @@ void mouseReleased(){
 	if(gameState == GameState.MainMenu){
 		if(playButton.Clicked(mouseX, mouseY)){
 	    gameState = GameState.Playing;
+			multiplaying = false;
+	  }
+		else if(multiplayButton.Clicked(mouseX, mouseY)){
+			multiplaying = true;
+	    gameState = GameState.Playing;
 	  }
 	  else if(highscoreButton.Clicked(mouseX, mouseY)){
 	    gameState = GameState.Highscore;
