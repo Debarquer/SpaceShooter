@@ -10,7 +10,7 @@ class PowerUp extends GameObject {
   int time;
   boolean trufalse = false;
   float sizemod = 50;
-  
+
 
   public PowerUp() {
     numbers = new int [4];
@@ -32,13 +32,16 @@ class PowerUp extends GameObject {
   }
 
   void update () {
+    if(enabled){
+      if (trufalse == true) {
+
+        ellips();
+      }
+    }
     if (score == scoreupdate) {
+      enabled = true;
       trufalse = true;
       time = millis();
-    }
-    if (trufalse == true) {
-
-      ellips();
     }
   }
   void ellips() {
@@ -50,10 +53,15 @@ class PowerUp extends GameObject {
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }
+    else{
+      enabled = false;
+    }
 
   }
   public void activate(){
   //test
     print("Activated power up");
+
+    RandNum();
   }
 }

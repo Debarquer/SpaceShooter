@@ -137,9 +137,12 @@ void draw(){
               bullets.get(i).enabled = false;
             }
           }
-          if(BulletEnemyCollision(bullets.get(i), powerup)){
-            //get powered up
-            bullets.get(i).enabled = false;
+          if(powerup.enabled){
+            if(BulletEnemyCollision(bullets.get(i), powerup)){
+              //get powered up
+              bullets.get(i).enabled = false;
+              powerup.enabled = false;
+            }
           }
         }
         else{

@@ -153,9 +153,12 @@ public void draw(){
               bullets.get(i).enabled = false;
             }
           }
-          if(BulletEnemyCollision(bullets.get(i), powerup)){
-            //get powered up
-            bullets.get(i).enabled = false;
+          if(powerup.enabled){
+            if(BulletEnemyCollision(bullets.get(i), powerup)){
+              //get powered up
+              bullets.get(i).enabled = false;
+              powerup.enabled = false;
+            }
           }
         }
         else{
@@ -355,9 +358,9 @@ class Bullet extends GameObject{
 public boolean BulletEnemyCollision(Bullet bullet, GameObject other){
 
   if(dist(bullet.pos.x, bullet.pos.y, other.pos.x, other.pos.y) < bullet.r + other.r){
-    print("Collision\n");
+    //print("Collision\n");
     if(other instanceof PowerUp){
-      print("With PowerUp\n");
+      //print("With PowerUp\n");
       ((PowerUp)other).activate();
     }
 
@@ -940,7 +943,7 @@ class PowerUp extends GameObject {
   int time;
   boolean trufalse = false;
   float sizemod = 50;
-  
+
 
   public PowerUp() {
     numbers = new int [4];
@@ -962,13 +965,16 @@ class PowerUp extends GameObject {
   }
 
   public void update () {
+    if(enabled){
+      if (trufalse == true) {
+
+        ellips();
+      }
+    }
     if (score == scoreupdate) {
+      enabled = true;
       trufalse = true;
       time = millis();
-    }
-    if (trufalse == true) {
-
-      ellips();
     }
   }
   public void ellips() {
@@ -980,11 +986,16 @@ class PowerUp extends GameObject {
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }
+    else{
+      enabled = false;
+    }
 
   }
   public void activate(){
   //test
     print("Activated power up");
+
+    RandNum();
   }
 }
 class Weapon{
