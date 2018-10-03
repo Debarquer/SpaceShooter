@@ -10,7 +10,9 @@ player.weapon.fireRate = 0.03;
 
 }
 void activate() {
-spray();
+  super.activate();
+
+  spray();
 
 }
 void deactivate(){

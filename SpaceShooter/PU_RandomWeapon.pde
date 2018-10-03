@@ -7,10 +7,9 @@ class PU_RandomWeapon extends PowerUp{
   }
 
   public void activate(){
-
+    super.activate();
     //print("Enjoy your new weapon \n");
     player.weapon = new FastWeapon(1, 0.01);
-    player.receivePowerup();
 
     player.weapon.fireRate = 0.01;
   }
