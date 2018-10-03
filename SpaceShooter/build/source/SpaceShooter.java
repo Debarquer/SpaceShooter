@@ -249,7 +249,7 @@ public void ResetGame(){
 public void SpawnEnemies(){
 
   if (level % 3 == 0){
- powerup.RandNum();
+    powerup.RandNum();
   }
   for(int i = 0; i < 6; i++){
     float r = 30;
@@ -343,9 +343,10 @@ class Bullet extends GameObject{
       enabled = false;
     }
 
-    fill(colFill.x, colFill.y, colFill.z);
+    //fill(colFill.x, colFill.y, colFill.z);
+    fill(player.weapon.bulletCol.x, player.weapon.bulletCol.y, player.weapon.bulletCol.z);
     stroke(colStroke.x,colStroke.y, colStroke.z);
-    
+
     ellipseMode(RADIUS);
     ellipse(pos.x, pos.y, r, r);
   }
@@ -522,11 +523,17 @@ class FastWeapon extends Weapon{
   float damage;
   float fireRate;
 
+  PVector bulletCol = new PVector(0, 255, 255);
+
   public FastWeapon(){
     fireRate = 0.01f;
+    damage = 1;
   }
 
   public FastWeapon(float damage, float fireRate){
+
+    print("Instantiated new fast weapon\n");
+
     this.damage = damage;
     this.fireRate = fireRate;
   }
@@ -872,6 +879,7 @@ public void DrawMainMenu(){
   image(exitImage, width/2 - exitImage.width/2, 600);
   exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
 }
+
 class PU_RandomWeapon extends PowerUp{
 
   public PU_RandomWeapon(){
@@ -881,8 +889,21 @@ class PU_RandomWeapon extends PowerUp{
   }
 
   public void activate(){
-    print("Enjoy your new weapon \n");
-    player.weapon = new FastWeapon();
+
+    //print("Enjoy your new weapon \n");
+    player.weapon = new FastWeapon(1, 0.01f);
+    player.receivePowerup();
+
+    player.weapon.fireRate = 0.01f;
+  }
+
+  public void deactivate(){
+  //test
+    //print("Deactivated power up");
+
+    //player.weapon = new Weapon();
+    player.weapon.fireRate = 0.3f;
+    //RandNum();
   }
 }
 class Player extends GameObject{
@@ -893,6 +914,9 @@ class Player extends GameObject{
   boolean canFire = true;
 
   Weapon weapon;
+
+  float powerupTimerMax = 3;
+  float powerupTimerCurr;
 
   public Player(){
     super();
@@ -913,10 +937,18 @@ class Player extends GameObject{
     if(!canFire){
       //print(shootTimerCurr + "\n");
       shootTimerCurr += (float)1/60;
+
       if(shootTimerCurr >= weapon.fireRate){
         shootTimerCurr = 0;
         canFire = true;
       }
+    }
+
+    print("Timer: " + powerupTimerCurr + "\n");
+    powerupTimerCurr+=(float)1/60;
+    if(powerupTimerCurr >= powerupTimerMax){
+      powerupTimerCurr = 0;
+      powerup.deactivate();
     }
 
     if(pos.y > height){
@@ -929,6 +961,10 @@ class Player extends GameObject{
     fill(colFill.x, colFill.y, colFill.z);
     stroke(colStroke.x,colStroke.y, colStroke.z);
     rect(pos.x, pos.y, size.x, size.y);
+  }
+
+  public void receivePowerup(){
+    powerupTimerCurr = 0;
   }
 
   public void Move(){
@@ -947,14 +983,14 @@ class Player extends GameObject{
 
   public void Shoot(){
     float rBullet = 5;
-    PVector posBullet = new PVector(pos.x + size.x, pos.y + size.y/2 - r/2, pos.z);
+    PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
     PVector velBullet = new PVector(10, 10, 10);
     PVector aBullet = new PVector(0, 0, 0);
     PVector colStrokeBullet = new PVector(0, 0, 0);
     PVector colFillBullet = new PVector(0, 255, 0);
     float healthBullet = 1;
 
-    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, weapon.damage);
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
     bullets.add(bullet);
   }
 }
@@ -1018,6 +1054,15 @@ class PowerUp extends GameObject {
   }
   public void activate(){
   //test
+    //print("Activated power up");
+
+    player.receivePowerup();
+
+    RandNum();
+  }
+
+  public void deactivate(){
+  //test
     print("Activated power up");
 
     RandNum();
@@ -1027,13 +1072,29 @@ class Weapon{
   float damage;
   float fireRate;
 
-  public Weapon(){
+  PVector bulletCol = new PVector(255, 255, 0);
 
+  public Weapon(){
+    damage = 1;
+    fireRate = 0.3f;
   }
 
   public Weapon(float damage, float fireRate){
     this.damage = damage;
     this.fireRate = fireRate;
+  }
+
+  public void Shoot(){
+    float rBullet = 5;
+    PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
+    PVector velBullet = new PVector(10, 10, 10);
+    PVector aBullet = new PVector(0, 0, 0);
+    PVector colStrokeBullet = new PVector(0, 0, 0);
+    PVector colFillBullet = new PVector(0, 255, 0);
+    float healthBullet = 1;
+
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    bullets.add(bullet);
   }
 }
   public void settings() {  size(1400, 900); }
