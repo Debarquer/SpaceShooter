@@ -41,6 +41,8 @@ class Player extends GameObject{
     if(powerupTimerCurr >= powerupTimerMax){
       powerupTimerCurr = 0;
       powerup.deactivate();
+    }{
+      powerup.Message();
     }
 
     if(pos.y > height){

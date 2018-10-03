@@ -58,7 +58,7 @@ class PowerUp extends GameObject {
   }
   public void activate(){
   //test
-    //print("Activated power up");
+    print("Base activate function\n");
 
     player.receivePowerup();
 
@@ -67,7 +67,7 @@ class PowerUp extends GameObject {
 
   public void deactivate(){
   //test
-    print("Activated power up");
+    print("Base deactivate function\n");
 
     RandNum();
   }

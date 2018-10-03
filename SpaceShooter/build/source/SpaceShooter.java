@@ -56,7 +56,7 @@ public void setup(){
   //damage, fireRate
   Weapon weapon = new Weapon(1, 0.3f);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-  powerup = new PU_RandomWeapon();
+  powerup = new PU_FasterBullets();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -876,6 +876,24 @@ public void DrawMainMenu(){
   exitImage = loadImage("Resources/ExitButton.png");
   image(exitImage, width/2 - exitImage.width/2, 600);
   exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
+}
+class PU_FasterBullets extends PowerUp{
+
+public void spray(){
+
+player.weapon.fireRate = 0.0009f;
+
+
+
+
+}
+public void activate() {
+spray();
+
+}
+
+
+
 }
 
 class PU_RandomWeapon extends PowerUp{
