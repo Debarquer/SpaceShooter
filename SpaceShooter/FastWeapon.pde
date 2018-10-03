@@ -2,7 +2,7 @@ class FastWeapon extends Weapon{
   float damage;
   float fireRate;
 
-  PVector bulletCol = new PVector(0, 255, 255);
+  PVector bulletCol = new PVector(0, 0, 255);
 
   public FastWeapon(){
     fireRate = 0.01;
