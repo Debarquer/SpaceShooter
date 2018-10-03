@@ -71,4 +71,6 @@ class PowerUp extends GameObject {
 
     RandNum();
   }
+  public void Message(){
+  }
 }
