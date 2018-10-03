@@ -37,9 +37,10 @@ void setup(){
   float health = 10;
   PVector size = new PVector(20, 15);
 
+  //damage, fireRate
   Weapon weapon = new Weapon(1, 0.3);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-  powerup = new PowerUp();
+  powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -232,7 +233,7 @@ void ResetGame(){
 void SpawnEnemies(){
 
   if (level % 3 == 0){
- powerup.RandNum();
+    powerup.RandNum();
   }
   for(int i = 0; i < 6; i++){
     float r = 30;

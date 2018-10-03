@@ -1,7 +1,6 @@
 class PowerUp extends GameObject {
   //ellipse (pos.x, pos.y, 20, 20);
 
-
   float PowerUpInc;
   public int numbers[];
   public int rand;
@@ -10,7 +9,6 @@ class PowerUp extends GameObject {
   int time;
   boolean trufalse = false;
   float sizemod = 50;
-
 
   public PowerUp() {
     numbers = new int [4];
@@ -49,7 +47,7 @@ class PowerUp extends GameObject {
     if (millis() < time + 3000) {
       float test = 1f -  ((float)millis() - time)/3000;
         r = test * sizemod;
-      fill(255);
+      fill(colFill.x, colFill.y, colFill.z);
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }

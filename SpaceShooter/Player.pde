@@ -26,7 +26,7 @@ class Player extends GameObject{
     if(!canFire){
       //print(shootTimerCurr + "\n");
       shootTimerCurr += (float)1/60;
-      if(shootTimerCurr >= shootTimerMax){
+      if(shootTimerCurr >= weapon.fireRate){
         shootTimerCurr = 0;
         canFire = true;
       }

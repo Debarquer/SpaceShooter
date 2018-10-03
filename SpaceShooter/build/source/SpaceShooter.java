@@ -53,9 +53,10 @@ public void setup(){
   float health = 10;
   PVector size = new PVector(20, 15);
 
+  //damage, fireRate
   Weapon weapon = new Weapon(1, 0.3f);
   player = new Player(pos, vel, a, colStroke, colFill, r, health, size, weapon);
-  powerup = new PowerUp();
+  powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -517,6 +518,19 @@ class Enemy extends GameObject{
     }
   }
 }
+class FastWeapon extends Weapon{
+  float damage;
+  float fireRate;
+
+  public FastWeapon(){
+    fireRate = 0.01f;
+  }
+
+  public FastWeapon(float damage, float fireRate){
+    this.damage = damage;
+    this.fireRate = fireRate;
+  }
+}
 abstract class GameObject{
   PVector pos, vel, a, colStroke, colFill;
   float r, health, currHealth;
@@ -858,6 +872,19 @@ public void DrawMainMenu(){
   image(exitImage, width/2 - exitImage.width/2, 600);
   exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 600, 600+exitImage.height);
 }
+class PU_RandomWeapon extends PowerUp{
+
+  public PU_RandomWeapon(){
+    super();
+
+    colFill = new PVector(50, 255, 50);
+  }
+
+  public void activate(){
+    print("Enjoy your new weapon \n");
+    player.weapon = new FastWeapon();
+  }
+}
 class Player extends GameObject{
   PVector size;
 
@@ -886,7 +913,7 @@ class Player extends GameObject{
     if(!canFire){
       //print(shootTimerCurr + "\n");
       shootTimerCurr += (float)1/60;
-      if(shootTimerCurr >= shootTimerMax){
+      if(shootTimerCurr >= weapon.fireRate){
         shootTimerCurr = 0;
         canFire = true;
       }
@@ -934,7 +961,6 @@ class Player extends GameObject{
 class PowerUp extends GameObject {
   //ellipse (pos.x, pos.y, 20, 20);
 
-
   float PowerUpInc;
   public int numbers[];
   public int rand;
@@ -943,7 +969,6 @@ class PowerUp extends GameObject {
   int time;
   boolean trufalse = false;
   float sizemod = 50;
-
 
   public PowerUp() {
     numbers = new int [4];
@@ -982,7 +1007,7 @@ class PowerUp extends GameObject {
     if (millis() < time + 3000) {
       float test = 1f -  ((float)millis() - time)/3000;
         r = test * sizemod;
-      fill(255);
+      fill(colFill.x, colFill.y, colFill.z);
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }
