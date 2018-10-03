@@ -8,6 +8,11 @@ class PU_FasterBullets extends PowerUp{
     spray();
   }
   void deactivate(){
+    super.deactivate();
     player.weapon.fireRate = 0.3;
+  }
+
+  void Message(){
+    DrawText(32, width/2, height/2, "You Shpot Faster");
   }
 }

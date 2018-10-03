@@ -46,6 +46,9 @@ class Player extends GameObject{
       //powerupTimerCurr = 0;
 
       if(hasPowerup){
+
+        //powerup.deactivate();
+        powerup = powerUps.get((int)random(powerUps.size()));
         powerup.deactivate();
         hasPowerup = false;
         powerup.hasGeneratedGoal = false;

@@ -18,6 +18,7 @@ PImage highscoreImage;
 PImage exitImage;
 
 ButtonRect playButton;
+ButtonRect multiplayButton;
 ButtonRect highscoreButton;
 ButtonRect exitButton;
 

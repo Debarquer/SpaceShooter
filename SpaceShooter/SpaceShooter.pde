@@ -25,6 +25,8 @@ float BGCPos = 0;
 float BGDPos = 0;
 float BGEPos = 0;
 
+ArrayList<PowerUp> powerUps;
+
 void setup(){
   size(1400, 900);
 
@@ -53,6 +55,11 @@ void setup(){
   BGCImage = loadImage("Resources/BGC.png");
   BGDImage = loadImage("Resources/BGD.png");
   BGEImage = loadImage("Resources/BGE.png");
+
+  powerUps = new ArrayList<PowerUp>();
+  powerUps.add(new PU_FasterBullets());
+  powerUps.add(new PU_MoveFaster());
+  powerUps.add(new PU_RandomWeapon());
 }
 
 void draw(){
@@ -236,6 +243,9 @@ void SpawnEnemies(){
   // if (level % 3 == 0){
   //   powerup.RandNum();
   // }
+
+
+
   for(int i = 0; i < 6; i++){
     float r = 30;
     float x = width + (i * (r + 50));

@@ -41,6 +41,8 @@ float BGCPos = 0;
 float BGDPos = 0;
 float BGEPos = 0;
 
+ArrayList<PowerUp> powerUps;
+
 public void setup(){
   
 
@@ -69,6 +71,11 @@ public void setup(){
   BGCImage = loadImage("Resources/BGC.png");
   BGDImage = loadImage("Resources/BGD.png");
   BGEImage = loadImage("Resources/BGE.png");
+
+  powerUps = new ArrayList<PowerUp>();
+  powerUps.add(new PU_FasterBullets());
+  powerUps.add(new PU_MoveFaster());
+  powerUps.add(new PU_RandomWeapon());
 }
 
 public void draw(){
@@ -252,6 +259,9 @@ public void SpawnEnemies(){
   // if (level % 3 == 0){
   //   powerup.RandNum();
   // }
+
+
+
   for(int i = 0; i < 6; i++){
     float r = 30;
     float x = width + (i * (r + 50));
@@ -524,7 +534,7 @@ class FastWeapon extends Weapon{
   float damage;
   float fireRate;
 
-  PVector bulletCol = new PVector(0, 255, 255);
+  PVector bulletCol = new PVector(0, 0, 255);
 
   public FastWeapon(){
     fireRate = 0.01f;
@@ -909,10 +919,17 @@ class PU_FasterBullets extends PowerUp{
     spray();
   }
   public void deactivate(){
+    super.deactivate();
     player.weapon.fireRate = 0.3f;
+  }
+
+  public void Message(){
+    DrawText(32, width/2, height/2, "You Shpot Faster");
   }
 }
 class PU_MoveFaster extends PowerUp{
+
+  PVector bulletCol = new PVector(66, 66, 255);
 
   float oldSpeed;
   float newSpeed;
@@ -942,8 +959,13 @@ public void Message(){
 }
 class PU_RandomWeapon extends PowerUp{
 
+  ArrayList<Weapon> weapons;
+
   public PU_RandomWeapon(){
     super();
+
+    weapons = new ArrayList<Weapon>();
+    weapons.add(new FastWeapon());
 
     colFill = new PVector(50, 255, 50);
   }
@@ -951,19 +973,24 @@ class PU_RandomWeapon extends PowerUp{
   public void activate(){
     super.activate();
     //print("Enjoy your new weapon \n");
-    player.weapon = new FastWeapon(1, 0.01f);
+    //player.weapon = new FastWeapon(1, 0.01);
+    player.weapon = weapons.get((int)random(weapons.size()));
 
     //player.weapon.fireRate = 0.01;
   }
 
   public void deactivate(){
-  //test
-  super.deactivate();
+    //test
+    super.deactivate();
     //print("Deactivated power up");
 
-  player.weapon = new Weapon();
+    player.weapon = new Weapon();
     //player.weapon.fireRate = 0.3;
     //RandNum();
+  }
+
+  public void Message(){
+    DrawText(32, width/2, height/2, "You HAve A New Weapon");
   }
 }
 class Player extends GameObject{
@@ -1014,6 +1041,9 @@ class Player extends GameObject{
       //powerupTimerCurr = 0;
 
       if(hasPowerup){
+
+        //powerup.deactivate();
+        powerup = powerUps.get((int)random(powerUps.size()));
         powerup.deactivate();
         hasPowerup = false;
         powerup.hasGeneratedGoal = false;

@@ -1,5 +1,7 @@
 class PU_MoveFaster extends PowerUp{
 
+  PVector bulletCol = new PVector(66, 66, 255);
+
   float oldSpeed;
   float newSpeed;
   public PU_MoveFaster(){
