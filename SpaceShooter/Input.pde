@@ -2,7 +2,12 @@ boolean moveLeft;
 boolean moveRight;
 boolean moveUp;
 boolean moveDown;
+boolean moveLeftP2;
+boolean moveRightP2;
+boolean moveUpP2;
+boolean moveDownP2;
 boolean space;
+boolean spaceP2;
 boolean pressedEscape;
 boolean releasedEscape;
 boolean pressedM;
@@ -19,19 +24,19 @@ void keyPressed()
 	{
 		if(keyCode == RIGHT)
 		{
-			moveRight = true;
+			moveRightP2 = true;
 		}
 		else if(keyCode == LEFT)
 		{
-			moveLeft = true;
+			moveLeftP2 = true;
 		}
 		if(keyCode == UP)
 		{
-			moveUp = true;
+			moveUpP2 = true;
 		}
 		else if(keyCode == DOWN)
 		{
-			moveDown = true;
+			moveDownP2 = true;
 		}
 	}
 
@@ -58,6 +63,10 @@ void keyPressed()
 	{
 		space = true;
 	}
+	if(key == '<')
+	{
+		spaceP2 = true;
+	}
 
 	if(key == 'p' || key == 'P')
 	{
@@ -78,19 +87,19 @@ void keyReleased()
 	{
 		if(keyCode == RIGHT)
 		{
-			moveRight = false;
+			moveRightP2 = false;
 		}
 		else if(keyCode == LEFT)
 		{
-			moveLeft = false;
+			moveLeftP2 = false;
 		}
 		if(keyCode == UP)
 		{
-			moveUp = false;
+			moveUpP2 = false;
 		}
 		else if(keyCode == DOWN)
 		{
-			moveDown = false;
+			moveDownP2 = false;
 		}
 	}
 
@@ -116,6 +125,10 @@ void keyReleased()
 	if(key == ' ')
 	{
 		space = false;
+	}
+	if(key == '<')
+	{
+		spaceP2 = false;
 	}
 
 	if(key == 'p' || key == 'P')

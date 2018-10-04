@@ -11,21 +11,27 @@ class PU_RandomWeapon extends PowerUp{
     colFill = new PVector(50, 255, 50);
   }
 
-  public void activate(){
-    super.activate();
+  public void activate(boolean isPlayer2){
+    super.activate(isPlayer2);
     //print("Enjoy your new weapon \n");
     //player.weapon = new FastWeapon(1, 0.01);
-    player.weapon = weapons.get((int)random(weapons.size()));
+    if(!isPlayer2)
+      player.weapon = weapons.get((int)random(weapons.size()));
+    else
+      player2.weapon = weapons.get((int)random(weapons.size()));
 
     //player.weapon.fireRate = 0.01;
   }
 
-  public void deactivate(){
+  public void deactivate(boolean isPlayer2){
     //test
     super.deactivate();
     //print("Deactivated power up");
 
-    player.weapon = new Weapon();
+    if(!isPlayer2)
+      player.weapon = new Weapon();
+    else
+      player2.weapon = new Weapon();
     //player.weapon.fireRate = 0.3;
     //RandNum();
   }

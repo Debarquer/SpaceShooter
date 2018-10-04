@@ -14,7 +14,7 @@ class Weapon{
     this.fireRate = fireRate;
   }
 
-  public void Shoot(Player p){
+  public void Shoot(Player p, boolean player2){
     float rBullet = 5;
     PVector posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2, p.pos.z);
     PVector velBullet = new PVector(10, 10, 10);
@@ -24,6 +24,7 @@ class Weapon{
     float healthBullet = 1;
 
     Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
+    bullet.player2 = player2;
     bullets.add(bullet);
   }
 }

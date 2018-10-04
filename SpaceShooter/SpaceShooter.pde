@@ -54,8 +54,9 @@ void setup(){
     float health2 = 10;
     PVector size2 = new PVector(20, 15);
     Weapon weapon2 = new Weapon(1, 0.3);
-    
+
     player2 = new Player(pos2, vel2, a2, colStroke2, colFill2, r2, health2, size2, weapon2);
+    player2.isPlayer2 = true;
   }
 
 
@@ -183,7 +184,6 @@ void draw(){
               powerup.enabled = false;
               powerup.keepDrawing = true;
               powerup.diableTimerCurr = 0;
-
             }
           }
         }
@@ -223,13 +223,13 @@ void draw(){
     if(space && player.canFire){
       player.canFire = false;
 
-      player.Shoot();
+      player.Shoot(false);
     }
     if(multiplaying){
-      if(space && player2.canFire){
+      if(spaceP2 && player2.canFire){
         player2.canFire = false;
 
-        player2.Shoot();
+        player2.Shoot(true);
       }
     }
 

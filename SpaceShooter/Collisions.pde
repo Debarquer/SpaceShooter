@@ -4,7 +4,7 @@ public boolean BulletEnemyCollision(Bullet bullet, GameObject other){
     //print("Collision\n");
     if(other instanceof PowerUp){
       //print("With PowerUp\n");
-      ((PowerUp)other).activate();
+      ((PowerUp)other).activate(bullet.player2);
     }
 
     return true;

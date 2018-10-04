@@ -70,8 +70,9 @@ public void setup(){
     float health2 = 10;
     PVector size2 = new PVector(20, 15);
     Weapon weapon2 = new Weapon(1, 0.3f);
-    
+
     player2 = new Player(pos2, vel2, a2, colStroke2, colFill2, r2, health2, size2, weapon2);
+    player2.isPlayer2 = true;
   }
 
 
@@ -199,7 +200,6 @@ public void draw(){
               powerup.enabled = false;
               powerup.keepDrawing = true;
               powerup.diableTimerCurr = 0;
-
             }
           }
         }
@@ -239,13 +239,13 @@ public void draw(){
     if(space && player.canFire){
       player.canFire = false;
 
-      player.Shoot();
+      player.Shoot(false);
     }
     if(multiplaying){
-      if(space && player2.canFire){
+      if(spaceP2 && player2.canFire){
         player2.canFire = false;
 
-        player2.Shoot();
+        player2.Shoot(true);
       }
     }
 
@@ -386,6 +386,7 @@ class Bullet extends GameObject{
 
   boolean playerBullet;
   float damage;
+  boolean player2 = false;
 
   public Bullet(){
     super();
@@ -426,7 +427,7 @@ public boolean BulletEnemyCollision(Bullet bullet, GameObject other){
     //print("Collision\n");
     if(other instanceof PowerUp){
       //print("With PowerUp\n");
-      ((PowerUp)other).activate();
+      ((PowerUp)other).activate(bullet.player2);
     }
 
     return true;
@@ -600,23 +601,25 @@ class FastWeapon extends Weapon{
     print("Instantiated new fast weapon\n");
   }
 
-  public void Shoot(){
-    print("Shooting fast\n");
+  public void Shoot(Player p, boolean player2){
     float rBullet = 5;
-    PVector posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2, player.pos.z);
+    PVector posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2, p.pos.z);
     PVector velBullet = new PVector(10, 10, 10);
     PVector aBullet = new PVector(0, 0, 0);
     PVector colStrokeBullet = new PVector(0, 0, 0);
     PVector colFillBullet = new PVector(0, 255, 0);
     float healthBullet = 1;
 
-    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
+    bullet.player2 = player2;
     bullets.add(bullet);
-    posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2 - 40, player.pos.z);
-    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2 + 15, p.pos.z);
+    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
+    bullet.player2 = player2;
     bullets.add(bullet);
-    posBullet = new PVector(player.pos.x + player.size.x, player.pos.y + player.size.y/2 - player.r/2 + 40, player.pos.z);
-    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, player.weapon.damage);
+    posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2 - 15, p.pos.z);
+    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
+    bullet.player2 = player2;
     bullets.add(bullet);
   }
 }
@@ -745,7 +748,12 @@ boolean moveLeft;
 boolean moveRight;
 boolean moveUp;
 boolean moveDown;
+boolean moveLeftP2;
+boolean moveRightP2;
+boolean moveUpP2;
+boolean moveDownP2;
 boolean space;
+boolean spaceP2;
 boolean pressedEscape;
 boolean releasedEscape;
 boolean pressedM;
@@ -762,19 +770,19 @@ public void keyPressed()
 	{
 		if(keyCode == RIGHT)
 		{
-			moveRight = true;
+			moveRightP2 = true;
 		}
 		else if(keyCode == LEFT)
 		{
-			moveLeft = true;
+			moveLeftP2 = true;
 		}
 		if(keyCode == UP)
 		{
-			moveUp = true;
+			moveUpP2 = true;
 		}
 		else if(keyCode == DOWN)
 		{
-			moveDown = true;
+			moveDownP2 = true;
 		}
 	}
 
@@ -801,6 +809,10 @@ public void keyPressed()
 	{
 		space = true;
 	}
+	if(key == '<')
+	{
+		spaceP2 = true;
+	}
 
 	if(key == 'p' || key == 'P')
 	{
@@ -821,19 +833,19 @@ public void keyReleased()
 	{
 		if(keyCode == RIGHT)
 		{
-			moveRight = false;
+			moveRightP2 = false;
 		}
 		else if(keyCode == LEFT)
 		{
-			moveLeft = false;
+			moveLeftP2 = false;
 		}
 		if(keyCode == UP)
 		{
-			moveUp = false;
+			moveUpP2 = false;
 		}
 		else if(keyCode == DOWN)
 		{
-			moveDown = false;
+			moveDownP2 = false;
 		}
 	}
 
@@ -859,6 +871,10 @@ public void keyReleased()
 	if(key == ' ')
 	{
 		space = false;
+	}
+	if(key == '<')
+	{
+		spaceP2 = false;
 	}
 
 	if(key == 'p' || key == 'P')
@@ -973,17 +989,24 @@ public void DrawMainMenu(){
   exitButton = new ButtonRect(width/2 - exitImage.width/2, width/2 + exitImage.width/2, 750, 750+exitImage.height);
 }
 class PU_FasterBullets extends PowerUp{
-  public void spray(){
-    player.weapon.fireRate = 0.03f;
+  public void spray(boolean isPlayer2){
+    if(!isPlayer2)
+      player.weapon.fireRate = 0.03f;
+    else
+      player2.weapon.fireRate = 0.03f;
   }
-  public void activate() {
-    super.activate();
+  public void activate(boolean player2) {
+    super.activate(player2);
 
-    spray();
+    spray(player2);
   }
-  public void deactivate(){
+  public void deactivate(boolean isPlayer2){
     super.deactivate();
-    player.weapon.fireRate = 0.3f;
+
+    if(!isPlayer2)
+      player.weapon.fireRate = 0.3f;
+    else
+      player2.weapon.fireRate = 0.3f;
   }
 
   public void Message(){
@@ -1002,18 +1025,31 @@ class PU_MoveFaster extends PowerUp{
     newSpeed = player.vel.y * 2;
   }
 
-public void activate(){
-super.activate();
+public void activate(boolean isPlayer2){
+super.activate(isPlayer2);
 
-player.weapon.fireRate = 0.03f;
-player.vel.y = newSpeed;
+if(!isPlayer2){
+  player.weapon.fireRate = 0.03f;
+  player.vel.y = newSpeed;
+}
+else{
+  player2.weapon.fireRate = 0.3f;
+  player2.vel.y = newSpeed;
+}
 
 }
 
-public void deactivate(){
+public void deactivate(boolean isPlayer2){
   super.deactivate();
-  player.weapon.fireRate = 0.3f;
-  player.vel.y = oldSpeed;
+
+  if(!isPlayer2){
+    player.weapon.fireRate = 0.3f;
+    player.vel.y = oldSpeed;
+  }
+  else{
+    player2.weapon.fireRate = 0.3f;
+    player2.vel.y = oldSpeed;
+  }
 }
 
 public void Message(){
@@ -1033,21 +1069,27 @@ class PU_RandomWeapon extends PowerUp{
     colFill = new PVector(50, 255, 50);
   }
 
-  public void activate(){
-    super.activate();
+  public void activate(boolean isPlayer2){
+    super.activate(isPlayer2);
     //print("Enjoy your new weapon \n");
     //player.weapon = new FastWeapon(1, 0.01);
-    player.weapon = weapons.get((int)random(weapons.size()));
+    if(!isPlayer2)
+      player.weapon = weapons.get((int)random(weapons.size()));
+    else
+      player2.weapon = weapons.get((int)random(weapons.size()));
 
     //player.weapon.fireRate = 0.01;
   }
 
-  public void deactivate(){
+  public void deactivate(boolean isPlayer2){
     //test
     super.deactivate();
     //print("Deactivated power up");
 
-    player.weapon = new Weapon();
+    if(!isPlayer2)
+      player.weapon = new Weapon();
+    else
+      player2.weapon = new Weapon();
     //player.weapon.fireRate = 0.3;
     //RandNum();
   }
@@ -1069,6 +1111,7 @@ class Player extends GameObject{
   float powerupTimerCurr;
 
   boolean hasPowerup = false;
+  boolean isPlayer2 = false;
 
   public Player(){
     super();
@@ -1142,14 +1185,27 @@ class Player extends GameObject{
     }
     else if(moveDown){
       //print("Moving down \n");
-      pos.y += vel.y;
+      player.pos.y += player.vel.y;
     }
-    else if(moveUp)
-      pos.y -= vel.y;
+    else if(moveUp){
+      player.pos.y -= player.vel.y;
+    }
+
+    if(moveDownP2 && moveUpP2){
+
+    }
+    else if(moveDownP2){
+      //print("Moving down \n");
+      player2.pos.y += player2.vel.y;
+    }
+    else if(moveUpP2){
+      player2.pos.y -= player2.vel.y;
+    }
+
   }
 
-  public void Shoot(){
-    weapon.Shoot(this);
+  public void Shoot(boolean player2){
+    weapon.Shoot(this, player2);
   }
 }
 class PowerUp extends GameObject {
@@ -1245,12 +1301,15 @@ class PowerUp extends GameObject {
       // trufalse = false;
     }
   }
-  public void activate(){
+  public void activate(boolean isPlayer2){
   //test
     print("Base activate function\n");
 
     messageTimerCurr = 0;
-    player.receivePowerup();
+    if(!isPlayer2)
+      player.receivePowerup();
+    else
+        player2.receivePowerup();
   }
 
   public void deactivate(){
@@ -1286,7 +1345,7 @@ class Weapon{
     this.fireRate = fireRate;
   }
 
-  public void Shoot(Player p){
+  public void Shoot(Player p, boolean player2){
     float rBullet = 5;
     PVector posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2, p.pos.z);
     PVector velBullet = new PVector(10, 10, 10);
@@ -1296,6 +1355,7 @@ class Weapon{
     float healthBullet = 1;
 
     Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
+    bullet.player2 = player2;
     bullets.add(bullet);
   }
 }

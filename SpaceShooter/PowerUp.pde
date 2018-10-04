@@ -91,12 +91,15 @@ class PowerUp extends GameObject {
       // trufalse = false;
     }
   }
-  public void activate(){
+  public void activate(boolean isPlayer2){
   //test
     print("Base activate function\n");
 
     messageTimerCurr = 0;
-    player.receivePowerup();
+    if(!isPlayer2)
+      player.receivePowerup();
+    else
+        player2.receivePowerup();
   }
 
   public void deactivate(){

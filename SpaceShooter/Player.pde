@@ -11,6 +11,7 @@ class Player extends GameObject{
   float powerupTimerCurr;
 
   boolean hasPowerup = false;
+  boolean isPlayer2 = false;
 
   public Player(){
     super();
@@ -84,13 +85,26 @@ class Player extends GameObject{
     }
     else if(moveDown){
       //print("Moving down \n");
-      pos.y += vel.y;
+      player.pos.y += player.vel.y;
     }
-    else if(moveUp)
-      pos.y -= vel.y;
+    else if(moveUp){
+      player.pos.y -= player.vel.y;
+    }
+
+    if(moveDownP2 && moveUpP2){
+
+    }
+    else if(moveDownP2){
+      //print("Moving down \n");
+      player2.pos.y += player2.vel.y;
+    }
+    else if(moveUpP2){
+      player2.pos.y -= player2.vel.y;
+    }
+
   }
 
-  void Shoot(){
-    weapon.Shoot(this);
+  void Shoot(boolean player2){
+    weapon.Shoot(this, player2);
   }
 }

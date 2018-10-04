@@ -2,6 +2,7 @@ class Bullet extends GameObject{
 
   boolean playerBullet;
   float damage;
+  boolean player2 = false;
 
   public Bullet(){
     super();
