@@ -713,13 +713,15 @@ public void DrawHighscore(){
   image(mainMenuImage, xOffset + width/2 - mainMenuImage.width/2, 700);
   mainMenuButton = new ButtonRect(xOffset + width/2 - mainMenuImage.width/2, xOffset+width/2 + mainMenuImage.width/2, 700, 700+mainMenuImage.height);
 
-  xOffset = -200;
-  if(!multiplaying)
-    highscoreMultiplayImage = loadImage("Resources/ButtonMultiplay.png");
-  else
-  highscoreMultiplayImage = loadImage("Resources/SoloplayButton.png");
-  image(highscoreMultiplayImage, xOffset + width/2 - highscoreMultiplayImage.width/2, 700);
-  highscoreMultiplayButton = new ButtonRect(xOffset + width/2 - highscoreMultiplayImage.width/2, xOffset+width/2 + highscoreMultiplayImage.width/2, 700, 700+highscoreMultiplayImage.height);
+  if(gameState == GameState.Highscore){
+    xOffset = -200;
+    if(!multiplaying)
+      highscoreMultiplayImage = loadImage("Resources/ButtonMultiplay.png");
+    else
+    highscoreMultiplayImage = loadImage("Resources/SoloplayButton.png");
+    image(highscoreMultiplayImage, xOffset + width/2 - highscoreMultiplayImage.width/2, 700);
+    highscoreMultiplayButton = new ButtonRect(xOffset + width/2 - highscoreMultiplayImage.width/2, xOffset+width/2 + highscoreMultiplayImage.width/2, 700, 700+highscoreMultiplayImage.height);
+  }
 
   if(gameState == gameState.GameOver){
     xOffset = 450;
@@ -891,8 +893,10 @@ public void keyPressed()
 		else{
 			//print("Character was not a ltter\n");
 			if((int)key == 8){
-				String tmp = nameA.substring(0, nameA.length()-1);
-				nameA = tmp;
+				if(nameA.length() > 0){
+					String tmp = nameA.substring(0, nameA.length()-1);
+					nameA = tmp;
+				}
 			}
 			else if((int)key == 9){
 				inputTextA = false;
@@ -908,8 +912,10 @@ public void keyPressed()
 		}
 		else{
 			if((int)key == 8){
-				String tmp = nameB.substring(0, nameB.length()-1);
-				nameB = tmp;
+				if(nameB.length() > 0){
+					String tmp = nameB.substring(0, nameB.length()-1);
+					nameB = tmp;
+				}
 			}
 			else if((int)key == 9){
 				inputTextA = true;
@@ -1107,9 +1113,6 @@ public void mouseReleased(){
 			ResetGame();
 	    gameState = GameState.MainMenu;
 	  }
-		if(highscoreMultiplayButton.Clicked(mouseX, mouseY)){
-			multiplaying = !multiplaying;
-		}
 		if(submitButton.Clicked(mouseX, mouseY)){
 			saveHighscore();
 			gameState = GameState.Highscore;

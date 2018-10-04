@@ -26,13 +26,15 @@ void DrawHighscore(){
   image(mainMenuImage, xOffset + width/2 - mainMenuImage.width/2, 700);
   mainMenuButton = new ButtonRect(xOffset + width/2 - mainMenuImage.width/2, xOffset+width/2 + mainMenuImage.width/2, 700, 700+mainMenuImage.height);
 
-  xOffset = -200;
-  if(!multiplaying)
-    highscoreMultiplayImage = loadImage("Resources/ButtonMultiplay.png");
-  else
-  highscoreMultiplayImage = loadImage("Resources/SoloplayButton.png");
-  image(highscoreMultiplayImage, xOffset + width/2 - highscoreMultiplayImage.width/2, 700);
-  highscoreMultiplayButton = new ButtonRect(xOffset + width/2 - highscoreMultiplayImage.width/2, xOffset+width/2 + highscoreMultiplayImage.width/2, 700, 700+highscoreMultiplayImage.height);
+  if(gameState == GameState.Highscore){
+    xOffset = -200;
+    if(!multiplaying)
+      highscoreMultiplayImage = loadImage("Resources/ButtonMultiplay.png");
+    else
+    highscoreMultiplayImage = loadImage("Resources/SoloplayButton.png");
+    image(highscoreMultiplayImage, xOffset + width/2 - highscoreMultiplayImage.width/2, 700);
+    highscoreMultiplayButton = new ButtonRect(xOffset + width/2 - highscoreMultiplayImage.width/2, xOffset+width/2 + highscoreMultiplayImage.width/2, 700, 700+highscoreMultiplayImage.height);
+  }
 
   if(gameState == gameState.GameOver){
     xOffset = 450;

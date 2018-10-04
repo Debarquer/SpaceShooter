@@ -28,8 +28,10 @@ void keyPressed()
 		else{
 			//print("Character was not a ltter\n");
 			if((int)key == 8){
-				String tmp = nameA.substring(0, nameA.length()-1);
-				nameA = tmp;
+				if(nameA.length() > 0){
+					String tmp = nameA.substring(0, nameA.length()-1);
+					nameA = tmp;
+				}
 			}
 			else if((int)key == 9){
 				inputTextA = false;
@@ -45,8 +47,10 @@ void keyPressed()
 		}
 		else{
 			if((int)key == 8){
-				String tmp = nameB.substring(0, nameB.length()-1);
-				nameB = tmp;
+				if(nameB.length() > 0){
+					String tmp = nameB.substring(0, nameB.length()-1);
+					nameB = tmp;
+				}
 			}
 			else if((int)key == 9){
 				inputTextA = true;
@@ -244,9 +248,6 @@ void mouseReleased(){
 			ResetGame();
 	    gameState = GameState.MainMenu;
 	  }
-		if(highscoreMultiplayButton.Clicked(mouseX, mouseY)){
-			multiplaying = !multiplaying;
-		}
 		if(submitButton.Clicked(mouseX, mouseY)){
 			saveHighscore();
 			gameState = GameState.Highscore;
