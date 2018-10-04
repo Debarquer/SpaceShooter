@@ -27,7 +27,10 @@ void DrawHighscore(){
   mainMenuButton = new ButtonRect(xOffset + width/2 - mainMenuImage.width/2, xOffset+width/2 + mainMenuImage.width/2, 700, 700+mainMenuImage.height);
 
   xOffset = -200;
-  highscoreMultiplayImage = loadImage("Resources/ButtonMultiplay.png");
+  if(!multiplaying)
+    highscoreMultiplayImage = loadImage("Resources/ButtonMultiplay.png");
+  else
+  highscoreMultiplayImage = loadImage("Resources/SoloplayButton.png");
   image(highscoreMultiplayImage, xOffset + width/2 - highscoreMultiplayImage.width/2, 700);
   highscoreMultiplayButton = new ButtonRect(xOffset + width/2 - highscoreMultiplayImage.width/2, xOffset+width/2 + highscoreMultiplayImage.width/2, 700, 700+highscoreMultiplayImage.height);
 
@@ -63,7 +66,7 @@ void DrawHighscore(){
 
   String s = "";
   if(!multiplaying)
-    s = "Highscores";
+    s = "Solo Highscores";
   else
     s = "2P Highscores";
   DrawText(32, width/2 - 100, 30, s);
@@ -138,7 +141,7 @@ String[] loadHighscore(){
 
 String[][] loadHighscoreB(){
   if(!multiplaying){
-    String[] highscoresOld = loadStrings("data/highscores2.txt");
+    String[] highscoresOld = loadStrings("data/highscores.txt");
 
     //nameA, nameB, score for every entry
     String[][] highscoresNew = new String[highscoresOld.length][2];
