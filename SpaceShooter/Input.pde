@@ -13,8 +13,38 @@ boolean releasedEscape;
 boolean pressedM;
 boolean releasedM;
 
+boolean inputTextA = false;
+boolean inputTextB = false;
+
 void keyPressed()
 {
+	if(inputTextA){
+		print("Starting input process\n");
+		if(java.lang.Character.isLetter(key)){
+			print("Character was a letter\n");
+			nameA += key;
+		}
+		else{
+			print("Character was not a ltter\n");
+			if((int)key == 8){
+				String tmp = nameA.substring(0, nameA.length()-1);
+				nameA = tmp;
+			}
+			//print((int)key + "\n");
+		}
+	}
+	else if(inputTextB){
+		if(java.lang.Character.isLetter(key)){
+			nameB += key;
+		}
+		else{
+			if((int)key == 8){
+				String tmp = nameB.substring(0, nameB.length()-1);
+				nameB = tmp;
+			}
+			//print((int)key + "\n");
+		}
+	}
 
 	//println(keyCode);
 
@@ -100,6 +130,11 @@ void keyReleased()
 		else if(keyCode == DOWN)
 		{
 			moveDownP2 = false;
+		}
+		else if(keyCode == ENTER || keyCode == RETURN)
+		{
+			inputTextA = false;
+			inputTextB = false;
 		}
 	}
 
@@ -189,9 +224,36 @@ void mouseReleased(){
 	    exit();
 	  }
 	}
-	else if(gameState == GameState.Highscore){
+	else if(gameState == GameState.GameOver){
 		if(mainMenuButton.Clicked(mouseX, mouseY)){
+			ResetGame();
 	    gameState = GameState.MainMenu;
 	  }
+		if(highscoreMultiplayButton.Clicked(mouseX, mouseY)){
+			multiplaying = !multiplaying;
+		}
+		if(submitButton.Clicked(mouseX, mouseY)){
+			saveHighscore();
+			gameState = GameState.Highscore;
+		}
+		if(textAreaA.Clicked(mouseX, mouseY)){
+			print("Clicked text area A \n");
+			inputTextA = true;
+			inputTextB = false;
+		}
+		if(textAreaB.Clicked(mouseX, mouseY)){
+			print("Clicked text area B \n");
+			inputTextA = false;
+			inputTextB = true;
+		}
+	}
+	else if(gameState == GameState.Highscore){
+		if(mainMenuButton.Clicked(mouseX, mouseY)){
+			ResetGame();
+	    gameState = GameState.MainMenu;
+	  }
+		if(highscoreMultiplayButton.Clicked(mouseX, mouseY)){
+			multiplaying = !multiplaying;
+		}
 	}
 }

@@ -10,7 +10,7 @@ PowerUp powerup;
 
 Stars stars;
 
-float maxHealth = 10;
+float maxHealth = 1;
 float health = maxHealth;
 float score = 0;
 float scoreIncrement = 10;
@@ -266,18 +266,20 @@ void draw(){
   else if(gameState == GameState.Highscore){
     DrawHighscore();
 
-    if(pressedM && releasedM){
-      gameState = GameState.Playing;
-      pressedM = false;
-      releasedM = false;
-    }
+    // if(pressedM && releasedM){
+    //   gameState = GameState.Playing;
+    //   pressedM = false;
+    //   releasedM = false;
+    // }
   }
   else if(gameState == GameState.GameOver){
-    saveHighscore();
+    //saveHighscore();
 
-    gameState = GameState.Highscore;
+    //gameState = GameState.Highscore;
+
+    //nameA = "";
+    //nameB = "";
     DrawHighscore();
-    ResetGame();
   }
 }
 
