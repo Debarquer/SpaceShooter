@@ -37,8 +37,8 @@ void DrawHighscore(){
     image(submitImage, xOffset + width/2 - submitImage.width/2, 567, 100, 50);
     submitButton = new ButtonRect(xOffset + width/2 - submitImage.width/2, xOffset+width/2 + submitImage.width/2, 567, 567+submitImage.height);
 
-    float tXA = 348;
-    float tXB = 250;
+    float tXA = 315;
+    float tXB = 300;
     float tYA = 565;
     float tYB = 50;
     if(inputTextA)
@@ -53,7 +53,7 @@ void DrawHighscore(){
       fill(155, 155, 155);
     else
       fill(255, 255, 255);
-    tXA *= 2;
+    tXA *= 2.1;
     rect(tXA, tYA, tXB, tYB);
     textAreaB = new ButtonRect(tXA, tXA+tXB, tYA, tYA+tYB);
     DrawText(32, tXA, tYA+25+(textAscent() + textDescent())/4, nameB);
@@ -71,14 +71,23 @@ void DrawHighscore(){
   float textHeight = textAscent() + textDescent();
 
   boolean drewAnything = false;
-  String[] sa = loadHighscore();
+  String[][] sa = loadHighscoreB();
 
   float stringHeight = sa.length * textHeight;
 
   for(int i = 0; i < sa.length; i++){
     if(topBoundary + i * textHeight + highscoreAnim > topBoundary+25 && i * textHeight + highscoreAnim < bottomBoundary){
         drewAnything = true;
-        DrawText(32, width/2 - 100, topBoundary + i * textHeight + highscoreAnim, sa[i]);
+
+        if(!multiplaying){
+          DrawText(32, -150 + width/2 - 100, topBoundary + i * textHeight + highscoreAnim, sa[i][0]);
+          DrawText(32, 160 + width/2 - 100, topBoundary + i * textHeight + highscoreAnim, sa[i][1]);
+        }
+        else{
+          DrawText(32, -235+width/2 - 100, topBoundary + i * textHeight + highscoreAnim, sa[i][0]);
+          DrawText(32, width/2 - 100, topBoundary + i * textHeight + highscoreAnim, sa[i][1]);
+          DrawText(32, 235+width/2 - 100, topBoundary + i * textHeight + highscoreAnim, sa[i][2]);
+        }
     }
   }
 
@@ -105,6 +114,7 @@ void saveHighscore(){
   }
   else{
     String[] highscores = loadStrings("data/highscores2.txt");
+
     String[] tmp = new String[highscores.length + 1];
     for(int i = 0; i < highscores.length; i++){
 
@@ -118,16 +128,46 @@ void saveHighscore(){
 }
 
 String[] loadHighscore(){
-  // String[] highscores = loadStrings("data/highscores.txt");
-  //
-  // String s = "";
-  // for(String string : highscores){
-  //   s += string + "\n";
-  // }
-  // return s;
-
-  if(!multiplaying)
-    return loadStrings("data/highscores.txt");
-  else
+  if(!multiplaying){
+      return loadStrings("data/highscores.txt");
+  }
+  else{
     return loadStrings("data/highscores2.txt");
+  }
+}
+
+String[][] loadHighscoreB(){
+  if(!multiplaying){
+    String[] highscoresOld = loadStrings("data/highscores2.txt");
+
+    //nameA, nameB, score for every entry
+    String[][] highscoresNew = new String[highscoresOld.length][2];
+    for(int i = 0; i < highscoresOld.length; i++){
+      //add here
+      String[] tmp = highscoresOld[i].split(" ");
+      highscoresNew[i] = new String[2];
+      for(int j = 0; j < 2; j++){
+        highscoresNew[i][j] = tmp[j];
+      }
+    }
+
+      return highscoresNew;
+  }
+  else{
+    String[] highscoresOld = loadStrings("data/highscores2.txt");
+
+    //nameA, nameB, score for every entry
+    String[][] highscoresNew = new String[highscoresOld.length][3];
+    for(int i = 0; i < highscoresOld.length; i++){
+      //add here
+      String[] tmp = highscoresOld[i].split(" ");
+      highscoresNew[i] = new String[3];
+      for(int j = 0; j < 3; j++){
+        highscoresNew[i][j] = tmp[j];
+      }
+    }
+
+      return highscoresNew;
+  }
+
 }

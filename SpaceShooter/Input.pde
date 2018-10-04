@@ -22,7 +22,8 @@ void keyPressed()
 		//print("Starting input process\n");
 		if(java.lang.Character.isLetter(key)){
 			//print("Character was a letter\n");
-			nameA += key;
+			if(nameA.length() < 11)
+				nameA += key;
 		}
 		else{
 			//print("Character was not a ltter\n");
@@ -39,7 +40,8 @@ void keyPressed()
 	}
 	else if(inputTextB){
 		if(java.lang.Character.isLetter(key)){
-			nameB += key;
+			if(nameB.length() < 11)
+				nameB += key;
 		}
 		else{
 			if((int)key == 8){
