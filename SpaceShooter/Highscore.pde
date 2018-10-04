@@ -41,12 +41,18 @@ void DrawHighscore(){
     float tXB = 250;
     float tYA = 565;
     float tYB = 50;
-    fill(255, 255, 255);
+    if(inputTextA)
+      fill(155, 155, 155);
+    else
+      fill(255, 255, 255);
     rect(tXA, tYA, tXB, tYB);
     textAreaA = new ButtonRect(tXA, tXA+tXB, tYA, tYA+tYB);
     DrawText(32, tXA, tYA+25+(textAscent() + textDescent())/4, nameA);
 
-    fill(255, 255, 255);
+    if(inputTextB)
+      fill(155, 155, 155);
+    else
+      fill(255, 255, 255);
     tXA *= 2;
     rect(tXA, tYA, tXB, tYB);
     textAreaB = new ButtonRect(tXA, tXA+tXB, tYA, tYA+tYB);

@@ -19,16 +19,20 @@ boolean inputTextB = false;
 void keyPressed()
 {
 	if(inputTextA){
-		print("Starting input process\n");
+		//print("Starting input process\n");
 		if(java.lang.Character.isLetter(key)){
-			print("Character was a letter\n");
+			//print("Character was a letter\n");
 			nameA += key;
 		}
 		else{
-			print("Character was not a ltter\n");
+			//print("Character was not a ltter\n");
 			if((int)key == 8){
 				String tmp = nameA.substring(0, nameA.length()-1);
 				nameA = tmp;
+			}
+			else if((int)key == 9){
+				inputTextA = false;
+				inputTextB = true;
 			}
 			//print((int)key + "\n");
 		}
@@ -42,8 +46,16 @@ void keyPressed()
 				String tmp = nameB.substring(0, nameB.length()-1);
 				nameB = tmp;
 			}
+			else if((int)key == 9){
+				inputTextA = true;
+				inputTextB = false;
+			}
 			//print((int)key + "\n");
 		}
+	}
+	if((int)key == 10){
+		saveHighscore();
+		gameState = GameState.Highscore;
 	}
 
 	//println(keyCode);
@@ -218,6 +230,7 @@ void mouseReleased(){
 	    gameState = GameState.Playing;
 	  }
 	  else if(highscoreButton.Clicked(mouseX, mouseY)){
+			highscoreAnim = bottomBoundary;
 	    gameState = GameState.Highscore;
 	  }
 		else if(exitButton.Clicked(mouseX, mouseY)){

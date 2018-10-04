@@ -728,12 +728,18 @@ public void DrawHighscore(){
     float tXB = 250;
     float tYA = 565;
     float tYB = 50;
-    fill(255, 255, 255);
+    if(inputTextA)
+      fill(155, 155, 155);
+    else
+      fill(255, 255, 255);
     rect(tXA, tYA, tXB, tYB);
     textAreaA = new ButtonRect(tXA, tXA+tXB, tYA, tYA+tYB);
     DrawText(32, tXA, tYA+25+(textAscent() + textDescent())/4, nameA);
 
-    fill(255, 255, 255);
+    if(inputTextB)
+      fill(155, 155, 155);
+    else
+      fill(255, 255, 255);
     tXA *= 2;
     rect(tXA, tYA, tXB, tYB);
     textAreaB = new ButtonRect(tXA, tXA+tXB, tYA, tYA+tYB);
@@ -833,16 +839,20 @@ boolean inputTextB = false;
 public void keyPressed()
 {
 	if(inputTextA){
-		print("Starting input process\n");
+		//print("Starting input process\n");
 		if(java.lang.Character.isLetter(key)){
-			print("Character was a letter\n");
+			//print("Character was a letter\n");
 			nameA += key;
 		}
 		else{
-			print("Character was not a ltter\n");
+			//print("Character was not a ltter\n");
 			if((int)key == 8){
 				String tmp = nameA.substring(0, nameA.length()-1);
 				nameA = tmp;
+			}
+			else if((int)key == 9){
+				inputTextA = false;
+				inputTextB = true;
 			}
 			//print((int)key + "\n");
 		}
@@ -856,8 +866,16 @@ public void keyPressed()
 				String tmp = nameB.substring(0, nameB.length()-1);
 				nameB = tmp;
 			}
+			else if((int)key == 9){
+				inputTextA = true;
+				inputTextB = false;
+			}
 			//print((int)key + "\n");
 		}
+	}
+	if((int)key == 10){
+		saveHighscore();
+		gameState = GameState.Highscore;
 	}
 
 	//println(keyCode);
@@ -1032,6 +1050,7 @@ public void mouseReleased(){
 	    gameState = GameState.Playing;
 	  }
 	  else if(highscoreButton.Clicked(mouseX, mouseY)){
+			highscoreAnim = bottomBoundary;
 	    gameState = GameState.Highscore;
 	  }
 		else if(exitButton.Clicked(mouseX, mouseY)){
