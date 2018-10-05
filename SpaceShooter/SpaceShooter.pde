@@ -60,7 +60,7 @@ void setup(){
   }
 
 
-  powerup = new PU_RandomWeapon();
+  powerup = new PU_Shield();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -75,9 +75,9 @@ void setup(){
   BGEImage = loadImage("Resources/BGE.png");
 
   powerUps = new ArrayList<PowerUp>();
-  powerUps.add(new PU_FasterBullets());
-  powerUps.add(new PU_MoveFaster());
-  powerUps.add(new PU_RandomWeapon());
+  // powerUps.add(new PU_FasterBullets());
+  // powerUps.add(new PU_MoveFaster());
+  // powerUps.add(new PU_RandomWeapon());
   powerUps.add(new PU_Shield());
 }
 
@@ -135,7 +135,8 @@ void draw(){
 
         if(BulletPlayerCollision(enemies.get(i), player)){
           enemies.get(i).enabled = false;
-          health--;
+          if(!player.shield)
+            health--;
           if(health <= 0){
             health = 0;
             print("YOU LOSE!\n");
@@ -146,7 +147,8 @@ void draw(){
         if(multiplaying){
           if(BulletPlayerCollision(enemies.get(i), player2)){
             enemies.get(i).enabled = false;
-            health--;
+            if(!player2.shield)
+              health--;
             if(health <= 0){
               health = 0;
               print("YOU LOSE!\n");
@@ -192,7 +194,8 @@ void draw(){
           //check collision with the player
           if(BulletPlayerCollision(bullets.get(i), player)){
             bullets.get(i).enabled = false;
-            health--;
+            if(!player.shield)
+              health--;
             if(health <= 0){
               health = 0;
               print("YOU LOSE!\n");
@@ -203,7 +206,8 @@ void draw(){
           if(multiplaying){
             if(BulletPlayerCollision(bullets.get(i), player2)){
               bullets.get(i).enabled = false;
-              health--;
+              if(!player2.shield)
+                health--;
               if(health <= 0){
                 health = 0;
                 print("YOU LOSE!\n");

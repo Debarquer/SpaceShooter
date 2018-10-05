@@ -76,7 +76,7 @@ public void setup(){
   }
 
 
-  powerup = new PU_RandomWeapon();
+  powerup = new PU_Shield();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -91,9 +91,10 @@ public void setup(){
   BGEImage = loadImage("Resources/BGE.png");
 
   powerUps = new ArrayList<PowerUp>();
-  powerUps.add(new PU_FasterBullets());
-  powerUps.add(new PU_MoveFaster());
-  powerUps.add(new PU_RandomWeapon());
+  // powerUps.add(new PU_FasterBullets());
+  // powerUps.add(new PU_MoveFaster());
+  // powerUps.add(new PU_RandomWeapon());
+  powerUps.add(new PU_Shield());
 }
 
 public void draw(){
@@ -150,7 +151,8 @@ public void draw(){
 
         if(BulletPlayerCollision(enemies.get(i), player)){
           enemies.get(i).enabled = false;
-          health--;
+          if(!player.shield)
+            health--;
           if(health <= 0){
             health = 0;
             print("YOU LOSE!\n");
@@ -161,7 +163,8 @@ public void draw(){
         if(multiplaying){
           if(BulletPlayerCollision(enemies.get(i), player2)){
             enemies.get(i).enabled = false;
-            health--;
+            if(!player2.shield)
+              health--;
             if(health <= 0){
               health = 0;
               print("YOU LOSE!\n");
@@ -207,7 +210,8 @@ public void draw(){
           //check collision with the player
           if(BulletPlayerCollision(bullets.get(i), player)){
             bullets.get(i).enabled = false;
-            health--;
+            if(!player.shield)
+              health--;
             if(health <= 0){
               health = 0;
               print("YOU LOSE!\n");
@@ -218,7 +222,8 @@ public void draw(){
           if(multiplaying){
             if(BulletPlayerCollision(bullets.get(i), player2)){
               bullets.get(i).enabled = false;
-              health--;
+              if(!player2.shield)
+                health--;
               if(health <= 0){
                 health = 0;
                 print("YOU LOSE!\n");
@@ -1303,6 +1308,44 @@ class PU_RandomWeapon extends PowerUp{
     DrawText(32, width/2, height/2, "You HAve A New Weapon: ");
   }
 }
+class PU_Shield extends PowerUp{
+
+  float healthinc;
+
+
+  public PU_Shield(){
+    super();
+
+  }
+
+public void activate(boolean isPlayer2){
+ println ("testactive");
+super.activate(isPlayer2);
+
+if(!isPlayer2){
+  player.shield = true;
+}
+else{
+  player2.shield = true;
+}
+
+}
+
+public void deactivate(boolean isPlayer2){
+  super.deactivate(isPlayer2);
+
+  if(!isPlayer2){
+    player.shield = false;
+  }
+  else{
+    player2.shield = false;
+  }
+}
+
+public void Message(){
+  DrawText(32, width/2, height/2, "You take no damage");
+}
+}
 class Player extends GameObject{
   PVector size;
 
@@ -1317,6 +1360,8 @@ class Player extends GameObject{
 
   boolean hasPowerup = false;
   boolean isPlayer2 = false;
+
+  boolean shield = false;
 
   public Player(){
     super();
@@ -1371,8 +1416,15 @@ class Player extends GameObject{
       pos.y = height;
     }
 
-    fill(colFill.x, colFill.y, colFill.z);
-    stroke(colStroke.x,colStroke.y, colStroke.z);
+    if(!shield){
+      fill(colFill.x, colFill.y, colFill.z);
+      stroke(colStroke.x,colStroke.y, colStroke.z);
+    }
+    else{
+      fill(random(255), random(255), random(255));
+      stroke(random(255), random(255), random(255));
+    }
+
     rect(pos.x, pos.y, size.x, size.y);
   }
 

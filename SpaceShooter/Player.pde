@@ -13,6 +13,8 @@ class Player extends GameObject{
   boolean hasPowerup = false;
   boolean isPlayer2 = false;
 
+  boolean shield = false;
+
   public Player(){
     super();
   }
@@ -66,8 +68,15 @@ class Player extends GameObject{
       pos.y = height;
     }
 
-    fill(colFill.x, colFill.y, colFill.z);
-    stroke(colStroke.x,colStroke.y, colStroke.z);
+    if(!shield){
+      fill(colFill.x, colFill.y, colFill.z);
+      stroke(colStroke.x,colStroke.y, colStroke.z);
+    }
+    else{
+      fill(random(255), random(255), random(255));
+      stroke(random(255), random(255), random(255));
+    }
+
     rect(pos.x, pos.y, size.x, size.y);
   }
 
