@@ -7,6 +7,7 @@ NameA 0
 Enter 0
 mmmmmmmmmmm 0
 Han 0
+awdwad 960
 Secret 20
 MegaScore 1210
 Stuff 3640
