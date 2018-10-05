@@ -3,3 +3,4 @@ NameA namebmsw 0
 NameA namebmswsws 10
 PersonA PersonB 0
 Hans Hanss 0
+Simon Vidar 50
