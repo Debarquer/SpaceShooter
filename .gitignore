@@ -37,5 +37,8 @@ application.windows32
 application.windows64
 application.macosx
 
+highscores.txt
+highscores2.txt
+
 
 # End of https://www.gitignore.io/api/java,processing
