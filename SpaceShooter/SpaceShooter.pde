@@ -60,7 +60,7 @@ void setup(){
   }
 
 
-  powerup = new PU_Shield();
+  powerup = new PU_RandomWeapon();
   enemies = new ArrayList<Enemy>();
   SpawnEnemies();
 
@@ -75,10 +75,10 @@ void setup(){
   BGEImage = loadImage("Resources/BGE.png");
 
   powerUps = new ArrayList<PowerUp>();
-  // powerUps.add(new PU_FasterBullets());
-  // powerUps.add(new PU_MoveFaster());
-  // powerUps.add(new PU_RandomWeapon());
-  powerUps.add(new PU_Shield());
+  powerUps.add(new PU_FasterBullets());
+  //powerUps.add(new PU_MoveFaster());
+  powerUps.add(new PU_RandomWeapon());
+  //powerUps.add(new PU_Shield());
 }
 
 void draw(){
