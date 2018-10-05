@@ -25,7 +25,7 @@ else{
 }
 
 public void deactivate(boolean isPlayer2){
-  super.deactivate();
+  super.deactivate(isPlayer2);
 
   if(!isPlayer2){
     player.weapon.fireRate = 0.3;

@@ -41,7 +41,7 @@ class Enemy extends GameObject{
     this.colFill.z = 0;
 
     this.r = r;
-    this.currHealth = this.health = baseHealth /*+ level*/;
+    this.currHealth = this.health = baseHealth + level/10;
 
     enabled = true;
 
@@ -96,13 +96,13 @@ class Enemy extends GameObject{
     ellipse(pos.x, pos.y, r, r);
     //ellipse(pos.x, pos.y, currHealth/this.health*r, currHealth/this.health*r);
 
-    PFont f;
-    f = createFont("Arial", 16, true);
-    textFont(f, 16);
-    fill(0, 0, 0);
-
-    String s = ""+(int)this.currHealth;
-    text(s, pos.x, pos.y);
+    // PFont f;
+    // f = createFont("Arial", 16, true);
+    // textFont(f, 16);
+    // fill(0, 0, 0);
+    //
+    // String s = ""+(int)this.currHealth;
+    // text(s, pos.x, pos.y);
   }
 
   public void Shoot(){

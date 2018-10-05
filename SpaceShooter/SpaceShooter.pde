@@ -10,7 +10,7 @@ PowerUp powerup;
 
 Stars stars;
 
-float maxHealth = 1;
+float maxHealth = 10;
 float health = maxHealth;
 float score = 0;
 float scoreIncrement = 10;
@@ -284,11 +284,17 @@ void draw(){
 }
 
 void ResetGame(){
+  print("reset game\n");
   score = 0;
   level = 0;
   health = maxHealth;
+  player.powerupTimerCurr = player.powerupTimerMax;
+  player2.powerupTimerCurr = player2.powerupTimerMax;
   for(Enemy enemy : enemies){
     enemy.enabled = false;
+  }
+  for(Bullet bullet : bullets){
+    bullet.enabled = false;
   }
 }
 

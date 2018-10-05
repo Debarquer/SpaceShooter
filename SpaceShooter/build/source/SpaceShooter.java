@@ -26,7 +26,7 @@ PowerUp powerup;
 
 Stars stars;
 
-float maxHealth = 1;
+float maxHealth = 10;
 float health = maxHealth;
 float score = 0;
 float scoreIncrement = 10;
@@ -300,11 +300,17 @@ public void draw(){
 }
 
 public void ResetGame(){
+  print("reset game\n");
   score = 0;
   level = 0;
   health = maxHealth;
+  player.powerupTimerCurr = player.powerupTimerMax;
+  player2.powerupTimerCurr = player2.powerupTimerMax;
   for(Enemy enemy : enemies){
     enemy.enabled = false;
+  }
+  for(Bullet bullet : bullets){
+    bullet.enabled = false;
   }
 }
 
@@ -485,7 +491,7 @@ class Enemy extends GameObject{
     this.colFill.z = 0;
 
     this.r = r;
-    this.currHealth = this.health = baseHealth /*+ level*/;
+    this.currHealth = this.health = baseHealth + level/10;
 
     enabled = true;
 
@@ -1118,12 +1124,12 @@ public void mouseReleased(){
 			gameState = GameState.Highscore;
 		}
 		if(textAreaA.Clicked(mouseX, mouseY)){
-			print("Clicked text area A \n");
+			//print("Clicked text area A \n");
 			inputTextA = true;
 			inputTextB = false;
 		}
 		if(textAreaB.Clicked(mouseX, mouseY)){
-			print("Clicked text area B \n");
+			//print("Clicked text area B \n");
 			inputTextA = false;
 			inputTextB = true;
 		}
@@ -1198,7 +1204,7 @@ class PU_FasterBullets extends PowerUp{
     spray(player2);
   }
   public void deactivate(boolean isPlayer2){
-    super.deactivate();
+    super.deactivate(isPlayer2);
 
     if(!isPlayer2)
       player.weapon.fireRate = 0.3f;
@@ -1237,7 +1243,7 @@ else{
 }
 
 public void deactivate(boolean isPlayer2){
-  super.deactivate();
+  super.deactivate(isPlayer2);
 
   if(!isPlayer2){
     player.weapon.fireRate = 0.3f;
@@ -1280,7 +1286,7 @@ class PU_RandomWeapon extends PowerUp{
 
   public void deactivate(boolean isPlayer2){
     //test
-    super.deactivate();
+    super.deactivate(isPlayer2);
     //print("Deactivated power up");
 
     if(!isPlayer2)
@@ -1344,10 +1350,9 @@ class Player extends GameObject{
       //powerupTimerCurr = 0;
 
       if(hasPowerup){
-
         //powerup.deactivate();
+        powerup.deactivate(isPlayer2);
         powerup = powerUps.get((int)random(powerUps.size()));
-        powerup.deactivate();
         hasPowerup = false;
         powerup.hasGeneratedGoal = false;
       }
@@ -1488,7 +1493,7 @@ class PowerUp extends GameObject {
 
   //draws the ellipse
   public void ellips() {
-    print(millis()+":"+(time+3000)+"\n");
+    //print(millis()+":"+(time+3000)+"\n");
     if (millis() < time + 3000) {
       float test = 1f -  ((float)millis() - time)/3000;
       //print(test + "\n");
@@ -1509,7 +1514,7 @@ class PowerUp extends GameObject {
         player2.receivePowerup();
   }
 
-  public void deactivate(){
+  public void deactivate(boolean isEnemy){
   //test
     print("Base deactivate function\n");
     //time = millis();

@@ -253,12 +253,12 @@ void mouseReleased(){
 			gameState = GameState.Highscore;
 		}
 		if(textAreaA.Clicked(mouseX, mouseY)){
-			print("Clicked text area A \n");
+			//print("Clicked text area A \n");
 			inputTextA = true;
 			inputTextB = false;
 		}
 		if(textAreaB.Clicked(mouseX, mouseY)){
-			print("Clicked text area B \n");
+			//print("Clicked text area B \n");
 			inputTextA = false;
 			inputTextB = true;
 		}

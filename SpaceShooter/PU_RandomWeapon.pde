@@ -25,7 +25,7 @@ class PU_RandomWeapon extends PowerUp{
 
   public void deactivate(boolean isPlayer2){
     //test
-    super.deactivate();
+    super.deactivate(isPlayer2);
     //print("Deactivated power up");
 
     if(!isPlayer2)

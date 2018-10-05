@@ -81,7 +81,7 @@ class PowerUp extends GameObject {
 
   //draws the ellipse
   void ellips() {
-    print(millis()+":"+(time+3000)+"\n");
+    //print(millis()+":"+(time+3000)+"\n");
     if (millis() < time + 3000) {
       float test = 1f -  ((float)millis() - time)/3000;
       //print(test + "\n");
@@ -102,7 +102,7 @@ class PowerUp extends GameObject {
         player2.receivePowerup();
   }
 
-  public void deactivate(){
+  public void deactivate(boolean isEnemy){
   //test
     print("Base deactivate function\n");
     //time = millis();
