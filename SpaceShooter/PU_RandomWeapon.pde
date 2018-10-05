@@ -7,6 +7,7 @@ class PU_RandomWeapon extends PowerUp{
 
     weapons = new ArrayList<Weapon>();
     weapons.add(new FastWeapon());
+    weapons.add(new StrongWeapon());
 
     colFill = new PVector(50, 255, 50);
   }
@@ -37,6 +38,6 @@ class PU_RandomWeapon extends PowerUp{
   }
 
   void Message(){
-    DrawText(32, width/2, height/2, "You HAve A New Weapon");
+    DrawText(32, width/2, height/2, "You HAve A New Weapon: ");
   }
 }

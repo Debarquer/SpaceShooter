@@ -23,8 +23,8 @@ class PowerUp extends GameObject {
 
   public PowerUp() {
     numbers = new int [4];
-    numbers[0] = 3;
-    numbers[1] = 5;
+    numbers[0] = 4;
+    numbers[1] = 6;
     numbers[2] = 8;
     numbers[3] = 10;
     pos = new PVector();
@@ -67,11 +67,13 @@ class PowerUp extends GameObject {
       if(!hasGeneratedGoal){
         time = millis();
         hasGeneratedGoal = true;
+
+        pos.x= random(width);
+        pos.y= random(height);
       }
 
+      ellips();
     }
-
-    ellips();
 
     messageTimerCurr += (float)1/60;
     if(messageTimerCurr < messageTimerMax){
@@ -90,6 +92,11 @@ class PowerUp extends GameObject {
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }
+    else{
+      hasGeneratedGoal = false;
+      puTimerCurr = 0;
+    }
+    //else if(!hasGeneratedGoal)
   }
   public void activate(boolean isPlayer2){
   //test
@@ -99,7 +106,7 @@ class PowerUp extends GameObject {
     if(!isPlayer2)
       player.receivePowerup();
     else
-        player2.receivePowerup();
+      player2.receivePowerup();
   }
 
   public void deactivate(boolean isEnemy){
@@ -110,9 +117,7 @@ class PowerUp extends GameObject {
     puTimerCurr = 0;
     rand = (int)random(numbers.length);
     puTimerMax = numbers[rand];
-    println (puTimerMax + "\n");
-    pos.x= random(width);
-    pos.y= random(height);
+    print(puTimerMax + "\n");
   }
 
   public void Message(){

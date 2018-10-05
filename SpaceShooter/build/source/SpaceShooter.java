@@ -302,10 +302,11 @@ public void draw(){
 public void ResetGame(){
   print("reset game\n");
   score = 0;
-  level = 0;
+  level = 1;
   health = maxHealth;
   player.powerupTimerCurr = player.powerupTimerMax;
   player2.powerupTimerCurr = player2.powerupTimerMax;
+
   for(Enemy enemy : enemies){
     enemy.enabled = false;
   }
@@ -416,7 +417,7 @@ class Bullet extends GameObject{
     }
 
     //fill(colFill.x, colFill.y, colFill.z);
-    fill(player.weapon.bulletCol.x, player.weapon.bulletCol.y, player.weapon.bulletCol.z);
+    fill(255);
     stroke(colStroke.x,colStroke.y, colStroke.z);
 
     ellipseMode(RADIUS);
@@ -546,13 +547,13 @@ class Enemy extends GameObject{
     ellipse(pos.x, pos.y, r, r);
     //ellipse(pos.x, pos.y, currHealth/this.health*r, currHealth/this.health*r);
 
-    PFont f;
-    f = createFont("Arial", 16, true);
-    textFont(f, 16);
-    fill(0, 0, 0);
-
-    String s = ""+(int)this.currHealth;
-    text(s, pos.x, pos.y);
+    // PFont f;
+    // f = createFont("Arial", 16, true);
+    // textFont(f, 16);
+    // fill(0, 0, 0);
+    //
+    // String s = ""+(int)this.currHealth;
+    // text(s, pos.x, pos.y);
   }
 
   public void Shoot(){
@@ -1268,6 +1269,7 @@ class PU_RandomWeapon extends PowerUp{
 
     weapons = new ArrayList<Weapon>();
     weapons.add(new FastWeapon());
+    weapons.add(new StrongWeapon());
 
     colFill = new PVector(50, 255, 50);
   }
@@ -1298,7 +1300,7 @@ class PU_RandomWeapon extends PowerUp{
   }
 
   public void Message(){
-    DrawText(32, width/2, height/2, "You HAve A New Weapon");
+    DrawText(32, width/2, height/2, "You HAve A New Weapon: ");
   }
 }
 class Player extends GameObject{
@@ -1435,8 +1437,8 @@ class PowerUp extends GameObject {
 
   public PowerUp() {
     numbers = new int [4];
-    numbers[0] = 3;
-    numbers[1] = 5;
+    numbers[0] = 4;
+    numbers[1] = 6;
     numbers[2] = 8;
     numbers[3] = 10;
     pos = new PVector();
@@ -1479,11 +1481,13 @@ class PowerUp extends GameObject {
       if(!hasGeneratedGoal){
         time = millis();
         hasGeneratedGoal = true;
+
+        pos.x= random(width);
+        pos.y= random(height);
       }
 
+      ellips();
     }
-
-    ellips();
 
     messageTimerCurr += (float)1/60;
     if(messageTimerCurr < messageTimerMax){
@@ -1502,6 +1506,11 @@ class PowerUp extends GameObject {
       ellipse (pos.x, pos.y, r, r);
       // trufalse = false;
     }
+    else{
+      hasGeneratedGoal = false;
+      puTimerCurr = 0;
+    }
+    //else if(!hasGeneratedGoal)
   }
   public void activate(boolean isPlayer2){
   //test
@@ -1511,7 +1520,7 @@ class PowerUp extends GameObject {
     if(!isPlayer2)
       player.receivePowerup();
     else
-        player2.receivePowerup();
+      player2.receivePowerup();
   }
 
   public void deactivate(boolean isEnemy){
@@ -1522,13 +1531,54 @@ class PowerUp extends GameObject {
     puTimerCurr = 0;
     rand = (int)random(numbers.length);
     puTimerMax = numbers[rand];
-    println (puTimerMax + "\n");
-    pos.x= random(width);
-    pos.y= random(height);
+    print(puTimerMax + "\n");
   }
 
   public void Message(){
 
+  }
+}
+class StrongWeapon extends Weapon{
+  float damage;
+  float fireRate;
+
+  PVector bulletCol = new PVector(0, 0, 255);
+
+  public StrongWeapon(){
+    fireRate = 0.3f;
+    damage = 4;
+  }
+
+  public StrongWeapon(float damage, float fireRate){
+
+    super(damage, fireRate);
+
+    fireRate = 0.3f;
+    damage = 4;
+
+    print("Instantiated new strong weapon\n");
+  }
+
+  public void Shoot(Player p, boolean player2){
+    float rBullet = 5;
+    PVector posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2, p.pos.z);
+    PVector velBullet = new PVector(10, 10, 10);
+    PVector aBullet = new PVector(0, 0, 0);
+    PVector colStrokeBullet = new PVector(0, 0, 0);
+    PVector colFillBullet = new PVector(0, 255, 0);
+    float healthBullet = 1;
+
+    Bullet bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
+    bullet.player2 = player2;
+    bullets.add(bullet);
+    posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2 + 15, p.pos.z);
+    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
+    bullet.player2 = player2;
+    bullets.add(bullet);
+    posBullet = new PVector(p.pos.x + p.size.x, p.pos.y + p.size.y/2 - p.r/2 - 15, p.pos.z);
+    bullet = new Bullet(posBullet, velBullet, aBullet, colStrokeBullet, colFillBullet, rBullet, healthBullet, true, p.weapon.damage);
+    bullet.player2 = player2;
+    bullets.add(bullet);
   }
 }
 class Weapon{

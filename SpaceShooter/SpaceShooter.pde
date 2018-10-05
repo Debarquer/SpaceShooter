@@ -286,10 +286,11 @@ void draw(){
 void ResetGame(){
   print("reset game\n");
   score = 0;
-  level = 0;
+  level = 1;
   health = maxHealth;
   player.powerupTimerCurr = player.powerupTimerMax;
   player2.powerupTimerCurr = player2.powerupTimerMax;
+
   for(Enemy enemy : enemies){
     enemy.enabled = false;
   }

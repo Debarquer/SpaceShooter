@@ -24,7 +24,7 @@ class Bullet extends GameObject{
     }
 
     //fill(colFill.x, colFill.y, colFill.z);
-    fill(player.weapon.bulletCol.x, player.weapon.bulletCol.y, player.weapon.bulletCol.z);
+    fill(255);
     stroke(colStroke.x,colStroke.y, colStroke.z);
 
     ellipseMode(RADIUS);
