@@ -75,10 +75,10 @@ void setup(){
   BGEImage = loadImage("Resources/BGE.png");
 
   powerUps = new ArrayList<PowerUp>();
-  powerUps.add(new PU_FasterBullets());
-  //powerUps.add(new PU_MoveFaster());
-  powerUps.add(new PU_RandomWeapon());
-  //powerUps.add(new PU_Shield());
+   powerUps.add(new PU_FasterBullets());
+   powerUps.add(new PU_MoveFaster());
+   powerUps.add(new PU_RandomWeapon());
+   powerUps.add(new PU_Shield());
 }
 
 void draw(){
