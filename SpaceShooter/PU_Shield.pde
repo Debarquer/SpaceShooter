@@ -1,12 +1,11 @@
-class PU_Health extends PowerUp{
+class PU_Shield extends PowerUp{
 
   float healthinc;
   
   
-  public PU_Health(){
+  public PU_Shield(){
     super();
-   healthinc = 5;
-   health = health + healthinc;
+
   }
  
  
@@ -18,10 +17,10 @@ void activate(boolean isPlayer2){
 super.activate(isPlayer2);
 
 if(!isPlayer2){
-  health = health + healthinc;
+
 }
 else{
- health = health + healthinc;
+ 
 }
 
 }
@@ -30,14 +29,14 @@ public void deactivate(boolean isPlayer2){
   super.deactivate(isPlayer2);
 
   if(!isPlayer2){
-   health = health ;
+ 
   }
   else{
-   health = health ;
+
   }
 }
 
 void Message(){
-  DrawText(32, width/2, height/2, "5 Health points");
+  DrawText(32, width/2, height/2, "You take no damage");
 }
 }

@@ -78,7 +78,7 @@ void setup(){
   powerUps.add(new PU_FasterBullets());
   powerUps.add(new PU_MoveFaster());
   powerUps.add(new PU_RandomWeapon());
-  powerUps.add(new PU_Health());
+  powerUps.add(new PU_Shield());
 }
 
 void draw(){
